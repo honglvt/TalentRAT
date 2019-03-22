@@ -3,6 +3,10 @@
           xmlns:tools="http://schemas.android.com/tools" package="com.hc.calling.callingtransaction">
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
@@ -17,20 +21,21 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <application
+            android:name="com.hc.calling.App"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.hc.calling.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".keeper.KeeperActivity"
+        <activity android:name="com.hc.calling.keeper.KeeperActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
                   android:excludeFromRecents="true"
                   android:exported="false"
@@ -38,9 +43,9 @@
                   android:launchMode="singleInstance"
                   android:process=":live"
         />
-        <service android:name=".MainService"
+        <service android:name="com.hc.calling.MainService"
         />
-        <service android:name=".KeeperService"/>
+        <service android:name="com.hc.calling.KeeperService"/>
     </application>
 
 </manifest>

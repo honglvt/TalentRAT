@@ -1,4 +1,4 @@
-package com.hc.calling.callingtransaction.util;
+package com.hc.calling.commands.callingtransaction;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -11,11 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CallingHistory {
     private static Uri callUri = CallLog.Calls.CONTENT_URI;
@@ -96,27 +92,27 @@ public class CallingHistory {
         return list;
     }
 
-    private Uri SMS_INBOX = Uri.parse("content://sms/");
+    private static Uri SMS_INBOX = Uri.parse("content://sms/");
 
-    public void getSmsFromPhone(Context context) {
+    public static List<Map<String, Object>> getSmsFromPhone(Context context) {
         List<Map<String, Object>> list = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
         Cursor cur = cr.query(SMS_INBOX, projection, null, null, "date desc");
         if (null == cur) {
             Log.i("ooc", "************cur == null");
-            return;
+            return null;
         }
         while (cur.moveToNext()) {
             String number = cur.getString(cur.getColumnIndex("address"));//手机号
             String name = cur.getString(cur.getColumnIndex("person"));//联系人姓名列表
             String body = cur.getString(cur.getColumnIndex("body"));//短信内容
-            //至此就获得了短信的相关的内容, 以下是把短信加入map中，构建listview,非必要。
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("num", number);
             map.put("mess", body);
             list.add(map);
         }
+        return list;
     }
 
 }

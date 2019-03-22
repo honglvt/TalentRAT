@@ -1,22 +1,18 @@
-package com.hc.calling.callingtransaction
+package com.hc.calling
 
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import com.hc.calling.pic.Photographer
+import com.hc.calling.callingtransaction.R
+import com.hc.calling.commands.pic.Photographer
 import com.hc.permission.PermissonUtil
-import io.socket.client.IO
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-
-    var socket = IO.socket("http://172.27.15.221:3000")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,18 +44,6 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            10000 -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("permission", "$permissions is granted")
-                }
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,4 +1,4 @@
-package com.hc.calling.pic
+package com.hc.calling.commands.pic
 
 import android.app.Activity
 import android.content.Intent
@@ -17,7 +17,9 @@ class Photographer {
     private fun dispatchTakePictureIntent(context: Activity) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(context.packageManager)?.also {
-                context.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                context.startActivityForResult(takePictureIntent,
+                    REQUEST_IMAGE_CAPTURE
+                )
             }
         }
     }

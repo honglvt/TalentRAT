@@ -1,4 +1,4 @@
-package com.hc.calling.callingtransaction
+package com.hc.calling
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -13,6 +13,7 @@ import android.os.IBinder
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationCompat.PRIORITY_MIN
+import com.hc.calling.callingtransaction.R
 
 /**
  * Created by ChanHong on 2019/3/18

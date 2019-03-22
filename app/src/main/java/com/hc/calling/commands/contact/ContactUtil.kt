@@ -1,4 +1,4 @@
-package com.hc.calling.callingtransaction.util
+package com.hc.calling.commands.contact
 
 import android.content.Context
 import android.provider.ContactsContract
@@ -6,7 +6,7 @@ import android.provider.ContactsContract
 class ContactUtil {
     companion object {
 
-        fun getContact(context: Context): MutableList<MutableMap<String, String>> {
+        fun getContacts(context: Context): MutableList<MutableMap<String, String>> {
             var contacts = mutableListOf<MutableMap<String, String>>()
             var uri = ContactsContract.Contacts.CONTENT_URI
 
