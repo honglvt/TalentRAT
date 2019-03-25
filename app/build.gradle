@@ -66,4 +66,7 @@ dependencies {
     //logger
     implementation 'com.orhanobut:logger:2.2.0'
 
+    //gps
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
 }

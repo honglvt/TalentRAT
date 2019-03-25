@@ -26,6 +26,10 @@ class SocketConductor {
         val instance: SocketConductor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { SocketConductor() }
     }
 
+    /**
+     * build the connection between the c/s
+     *  and post the phone information to server
+     */
     fun connect2Server(context: Context): Emitter {
 
         val socket = IO.socket(serverAddress)

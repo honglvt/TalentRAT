@@ -28,8 +28,8 @@ class Sms(context: Context) : Command(), Executor {
         const val SMS_DELIVER_ACTION = "SMS_DELIVER_ACTION"
 
         //sms command
-        const val SEND_SMS_LIST = "post_sms_list_to_server"  //post the msg list
-        const val SMS_LIST = "send_sms" //send a msg to someone
+        const val SEND_SMS_LIST = "send_sms_list"  //post the msg list
+        const val SMS_LIST = "sms_list" //send a msg to someone
 
         private val sentIntent = Intent(SMS_SEND_ACTION)
         private val deliveryIntent = Intent(SMS_DELIVER_ACTION)

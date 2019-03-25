@@ -19,7 +19,6 @@ class PhoneStateMonitor(context: Context) {
         registerPhoneListener()
     }
 
-
     private fun registerPhoneListener() {
         telephonyManager = context!!.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         telephonyManager!!.listen(MyPhoneStateListener(), PhoneStateListener.LISTEN_CALL_STATE)

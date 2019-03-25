@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
@@ -73,7 +74,9 @@ public class GPSUtils {
 
         }
         //监视地理位置变化
-        locationManager.requestLocationUpdates(locationProvider, 3000, 1, locationListener);
+        final String finalLocationProvider = locationProvider;
+
+        locationManager.requestLocationUpdates(finalLocationProvider, 3000, 1, locationListener);
         return null;
     }
 

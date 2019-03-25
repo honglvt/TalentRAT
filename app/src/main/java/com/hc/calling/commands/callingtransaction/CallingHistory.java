@@ -26,7 +26,7 @@ public class CallingHistory {
      *
      * @return 读取到的数据
      */
-    public static List<Map<String, String>> getDataList(Context context) {
+    public static List<CallHistoryDTO> getDataList(Context context) {
         // 1.获得ContentResolver
         ContentResolver resolver = context.getContentResolver();
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
@@ -39,7 +39,7 @@ public class CallingHistory {
                 columns
                 , null, null, CallLog.Calls.DEFAULT_SORT_ORDER// 按照时间逆序排列，最近打的最先显示
         );
-        List<Map<String, String>> list = new ArrayList<>();
+        List<CallHistoryDTO> list = new ArrayList<>();
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
             String number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
@@ -78,16 +78,12 @@ public class CallingHistory {
                 //前天
                 dayString = "前天";
             }
-            Map<String, String> map = new HashMap<>();
-            //"未备注联系人"
-            map.put("name", (name == null) ? "未备注联系人" : name);//姓名
-            map.put("number", number);//手机号
-            map.put("date", date);//通话日期
-            // "分钟"
-            map.put("duration", (duration / 60) + "分钟");//时长
-            map.put("type", typeString);//类型
-            map.put("time", time);//通话时间
-            list.add(map);
+            if (name == null){
+                name = "未备注联系人";
+            }
+            CallHistoryDTO callHistoryDTO = new CallHistoryDTO(name,number,date,duration+"",typeString,time);
+
+            list.add(callHistoryDTO);
         }
         return list;
     }
