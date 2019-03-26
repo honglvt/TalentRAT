@@ -1,15 +1,13 @@
 package com.hc.calling
 
 import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.hc.calling.callingtransaction.R
-import com.hc.calling.commands.pic.Photographer
+import com.hc.calling.commands.gps.GPS
 import com.hc.permission.PermissonUtil
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +31,11 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_CALL_LOG,
-                Manifest.permission.READ_SMS
+                Manifest.permission.READ_SMS,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
             ),
             10000,
             object : PermissonUtil.PermissionCallBack {
@@ -46,12 +48,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === Photographer.REQUEST_IMAGE_CAPTURE && resultCode === Activity.RESULT_OK) {
-            val extras = data!!.getExtras()
-            val imageBitmap = extras.get("data") as Bitmap
-            img.setImageBitmap(imageBitmap)
-        }
+    override fun onResume() {
+        super.onResume()
+        GPS.getGPS(this) {}
     }
 }

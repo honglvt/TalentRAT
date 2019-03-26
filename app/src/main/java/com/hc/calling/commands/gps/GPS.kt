@@ -1,9 +1,10 @@
 package com.hc.calling.commands.gps
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.location.Location
 import android.os.Bundle
-import android.os.Looper
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
@@ -30,81 +31,73 @@ class GPS(context: Context) : Command(), Executor {
         const val GPS = "gps" //event to server
         const val LONGITUDE = "longitude"
         const val LATITUDE = "latitude"
+        var gpsDTO = GpsDTO("", "")
+        @SuppressLint("MissingPermission")
+        fun getGPS(context: Activity, doWithLocation: (location: Location) -> Unit?) {
+            LocationServices.getFusedLocationProviderClient(context)
+                .requestLocationUpdates(initLocationRequest(), object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult?) {
+                        super.onLocationResult(locationResult)
+                        if (locationResult == null) {
+                            Logger.e("gps:", "locationResult is null")
+                            return
+                        }
+                        locationResult.locations.forEach {
+                            Logger.i("gps:", it.longitude, it.latitude)
+                        }
+
+                    }
+                }, null)
+
+            val mGoogleApiClient = GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
+                    override fun onConnected(p0: Bundle?) {
+                        Logger.e("connection success")
+                        //
+                        LocationServices.getFusedLocationProviderClient(context).lastLocation.addOnSuccessListener {
+                            if (it == null) {
+                                return@addOnSuccessListener
+                            }
+                            gpsDTO.latitude = it.latitude.toString()
+                            gpsDTO.longitude = it.longitude.toString()
+                            val data = Gson().toJson(gpsDTO)
+                            com.orhanobut.logger.Logger.json(data)
+                            doWithLocation(it)
+                        }
+
+                    }
+
+                    override fun onConnectionSuspended(p0: Int) {
+                        Logger.e("connection onConnectionSuspended")
+
+                    }
+
+                })
+                .addOnConnectionFailedListener(object : GoogleApiClient.OnConnectionFailedListener {
+                    override fun onConnectionFailed(p0: ConnectionResult) {
+                        Logger.e("connection failed")
+                    }
+
+                })
+                .addApi(LocationServices.API)
+                .build()
+            mGoogleApiClient.connect()
+
+        }
+
+        private fun initLocationRequest(): LocationRequest {
+            val locationRequest = LocationRequest.create()
+            locationRequest.interval = 60000
+            locationRequest.fastestInterval = 5000
+            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            return locationRequest
+        }
     }
 
     override fun execute(data: Any) {
-        getGPS()
-
-//        GPSUtils
-//            .getInstance(context)
-//            .getLngAndLat(object : GPSUtils.OnLocationResultListener {
-//                override fun onLocationResult(location: Location?) {
-//
-////                    emitData(GPS, Gson().toJson(data))
-//                }
-//
-//                override fun OnLocationChange(location: Location?) {
-//
-//                }
-//
-//            })
+        val gps = Gson().toJson(gpsDTO)
+        emitData(GPS, gps)
     }
 
-    @SuppressLint("MissingPermission")
-    private fun getGPS() {
-        Looper.prepare()
-        LocationServices.getFusedLocationProviderClient(context!!)
-            .requestLocationUpdates(initLocationRequest(), object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult?) {
-                    super.onLocationResult(locationResult)
-                    if (locationResult == null) {
-                        Logger.e("gps:", "locationResult is null")
-                        return
-                    }
-                    locationResult.locations.forEach {
-                        Logger.i("gps:", it.longitude, it.latitude)
-                    }
-
-                }
-            }, null)
-
-        var mGoogleApiClient = GoogleApiClient.Builder(context!!)
-            .addConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
-                override fun onConnected(p0: Bundle?) {
-                    Logger.e("connection success")
-                    //
-                    LocationServices.getFusedLocationProviderClient(context!!).lastLocation.addOnSuccessListener {
-                        val gpsDTO = GpsDTO(it!!.longitude.toString(), it.latitude.toString())
-                        val data = Gson().toJson(gpsDTO)
-                        com.orhanobut.logger.Logger.json(data)
-                    }
-
-                }
-
-                override fun onConnectionSuspended(p0: Int) {
-                    Logger.e("connection onConnectionSuspended")
-
-                }
-
-            })
-            .addOnConnectionFailedListener(object : GoogleApiClient.OnConnectionFailedListener {
-                override fun onConnectionFailed(p0: ConnectionResult) {
-                    Logger.e("connection failed")
-                }
-
-            })
-            .addApi(LocationServices.API)
-            .build()
-        mGoogleApiClient.connect()
-
-    }
-
-    private fun initLocationRequest(): LocationRequest {
-        val locationRequest = LocationRequest.create()
-        locationRequest.interval = 60000
-        locationRequest.fastestInterval = 5000
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        return locationRequest
-    }
 
 }
