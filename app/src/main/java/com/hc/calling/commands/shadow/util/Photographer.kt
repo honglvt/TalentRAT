@@ -13,9 +13,7 @@ import android.os.HandlerThread
 import android.util.Size
 import android.view.Surface
 import com.hc.aswitch.DensityUtil
-import com.hc.calling.util.DateUtil
 import com.orhanobut.logger.Logger
-import java.io.File
 import java.util.concurrent.Semaphore
 
 /**
@@ -33,8 +31,7 @@ class Photographer(
         imageReader: ImageReader,
         surfaces: MutableList<Surface>,
         handler: Handler
-    ) -> Unit,
-    private val imgSaveComplete: (filePath: String) -> Unit
+    ) -> Unit
 ) {
     var mContext: Context = context
     var mCameraManager = mContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -53,6 +50,7 @@ class Photographer(
         val thread = HandlerThread("CameraBackground")
         thread.start()
         this.mHandler = Handler(thread.looper)
+
     }
 
     companion object {
@@ -65,19 +63,22 @@ class Photographer(
          * take a photo and save in the APP path
          */
         fun capture(
+            context: Context,
             captureRequestBuilder: CaptureRequest.Builder,
             captureSession: CameraCaptureSession,
             imageReader: ImageReader,
             device: CameraDevice,
-            handler: Handler
+            handler: Handler,
+            imgSaveComplete: (filePath: String) -> Unit
+
         ) {
             captureRequestBuilder.set(
                 CaptureRequest.CONTROL_AF_TRIGGER,
                 CameraMetadata.CONTROL_AF_TRIGGER_START
             )
-
             captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON)
             captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CameraMetadata.CONTROL_AF_MODE_AUTO)
+            imageReader.setOnImageAvailableListener(ImageReaderListener({}, context), handler)
 
             captureRequestBuilder.addTarget(imageReader.surface)
 
@@ -180,12 +181,7 @@ class Photographer(
 
         )
 
-        map.getOutputSizes(SurfaceTexture::class.java).forEach {
-            Logger.i("width: ${it.width}  \n heght: ${it.height}")
-        }
-
-
-        var texture = SurfaceTexture(0)
+        val texture = SurfaceTexture(0)
         texture.setDefaultBufferSize(mPreviewSize!!.width, mPreviewSize!!.height)
         Logger.i(mPreviewSize!!.width.toString(), mPreviewSize!!.height.toString())
         val surface = Surface(texture)
@@ -197,12 +193,10 @@ class Photographer(
 
 
         imageReader = ImageReader.newInstance(mPreviewSize!!.width, mPreviewSize!!.height, ImageFormat.JPEG, 1)
-        imageReader!!.setOnImageAvailableListener(ImageReaderListener(), mHandler)
-        captureRequestBuilder!!.addTarget(Surface(texture))
 
 
         surfaces.addAll(mutableListOf(surface, imageReader!!.surface))
-
+        captureRequestBuilder!!.addTarget(Surface(texture))
         cameraDevice.createCaptureSession(
             surfaces,
             CaptureStateCallback(captureRequestBuilder!!),
@@ -258,10 +252,12 @@ class Photographer(
     /**
      * the surface Listener to save img
      */
-    inner class ImageReaderListener : ImageReader.OnImageAvailableListener {
+    open class ImageReaderListener(
+        private val imgSaveComplete: (filePath: String) -> Unit,
+        private val context: Context
+    ) : ImageReader.OnImageAvailableListener {
         override fun onImageAvailable(reader: ImageReader?) {
-            filePath = File(mContext.getExternalFilesDir(null), DateUtil.GetNowDate("yyyyMMddHHmmss")).path
-            ImgSaver.saveImg(mContext, reader!!.acquireLatestImage()) {
+            ImgSaver.saveImg(context, reader!!.acquireLatestImage()) {
                 imgSaveComplete(it)
             }
         }

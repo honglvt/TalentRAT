@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.hc.calling.callingtransaction.R
+import com.hc.calling.commands.shadow.data.ShadowVM
 import com.hc.calling.commands.shadow.util.Photographer
 import com.hc.permission.PermissonUtil
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.logging.Logger
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,9 +21,8 @@ class MainActivity : AppCompatActivity() {
         //start two services for keep the mainly service alive
         val intent = Intent(this, MainService::class.java)
         val intent2 = Intent(this, KeeperService::class.java)
-//        startService(intent)
-//        startService(intent2)
-//        Photographer(this).openCamera(Photographer.CAMERA_BACK)
+        startService(intent)
+        startService(intent2)
 
         //request the permissions
         PermissonUtil.requestPermisson(
@@ -48,8 +49,7 @@ class MainActivity : AppCompatActivity() {
             })
 
         tv_btn_takephoto.setOnClickListener {
-            //            var path = File(this.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
-//
+            //
 //            GlobalScope.launch(Dispatchers.IO) {
 //
 //                VideoRecoder()
@@ -72,9 +72,28 @@ class MainActivity : AppCompatActivity() {
 
                 Photographer.capture(builder, session, imageReader, device, handler)
 
+
+//                val path = File(this.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
+//
+//                VideoRecoder {
+//                    ShadowVM().upLoadPic(File(it)) {
+//                        Logger.i(" upload finished")
+//                    }
+//                }
+//                    .apply {
+//                        initMediaRecorde(path)
+//                            .apply {
+//                                requestRecord(device, surface, handler)
+//                            }
+//                    }
+
+
             },
             {
-                    com.orhanobut.logger.Logger.i("img saved completed")
+                com.orhanobut.logger.Logger.i("img saved completed")
+                ShadowVM().upLoadPic(File(it)) { data ->
+                    Logger.i(data)
+                }
             }
         ).openCamera("0")
 
