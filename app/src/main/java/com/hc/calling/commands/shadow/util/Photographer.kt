@@ -1,7 +1,6 @@
 package com.hc.calling.commands.shadow.util
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
@@ -12,7 +11,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Size
 import android.view.Surface
-import com.hc.aswitch.DensityUtil
 import com.orhanobut.logger.Logger
 import java.util.concurrent.Semaphore
 
@@ -43,7 +41,6 @@ class Photographer(
     private var captureRequestBuilder: CaptureRequest.Builder? = null
     private var imageReader: ImageReader? = null
     private var cameraOpenCloseLock = Semaphore(1)
-
     private var filePath: String? = null
 
     init {
@@ -57,6 +54,7 @@ class Photographer(
         val REQUEST_IMAGE_CAPTURE = 1
         val CAMERA_FRONT = "1"
         val CAMERA_BACK = "0"
+        var size = mutableMapOf<String, Int>()
 
 
         /**
@@ -78,7 +76,9 @@ class Photographer(
             )
             captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON)
             captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CameraMetadata.CONTROL_AF_MODE_AUTO)
-            imageReader.setOnImageAvailableListener(ImageReaderListener({}, context), handler)
+            imageReader.setOnImageAvailableListener(ImageReaderListener({
+                imgSaveComplete(it)
+            }, context), handler)
 
             captureRequestBuilder.addTarget(imageReader.surface)
 
@@ -132,7 +132,7 @@ class Photographer(
                         mCameraDevice = camera
                         cameraOpenCloseLock.release()
                         createCameraSeesion(
-                            cameraID, cameraDevice = camera!!
+                            cameraDevice = camera!!
                         )
                     }
 
@@ -169,15 +169,15 @@ class Photographer(
     }
 
     private fun createCameraSeesion(
-        cameraID: String,
         cameraDevice: CameraDevice
     ) {
-        val map =
-            mCameraManager.getCameraCharacteristics(cameraID).get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+        size.forEach {
+            Logger.i(it.value.toString())
+        }
 
         mPreviewSize = Size(
-            DensityUtil.getWindowMetrics(mContext as Activity, DensityUtil.WIDTH),
-            DensityUtil.getWindowMetrics(mContext as Activity, DensityUtil.HEIGHT)
+            size["width"]!!,
+            size["height"]!!
 
         )
 

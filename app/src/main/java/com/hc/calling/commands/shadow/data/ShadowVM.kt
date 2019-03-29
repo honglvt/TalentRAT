@@ -15,7 +15,7 @@ import java.io.File
  */
 class ShadowVM {
     @SuppressLint("CheckResult")
-    fun upLoadPic(file: File, action: (data: String) -> Unit) {
+    fun upLoadFile(file: File, action: (data: String) -> Unit) {
 
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)

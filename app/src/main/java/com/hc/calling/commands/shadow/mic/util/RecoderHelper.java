@@ -1,28 +1,33 @@
-package com.hc.calling.commands.mic.util;
+package com.hc.calling.commands.shadow.mic.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.widget.Toast;
+import io.reactivex.functions.Consumer;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class RecoderHelper {
     public MediaRecorder mMediaRecorder;
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private Context mContext;
+    private RecordCompletedListener recordCompletedListener;
 
-    public RecoderHelper(Context context) {
+    public RecoderHelper(Context context,RecordCompletedListener recordCompletedListener) {
+        this.recordCompletedListener = recordCompletedListener;
         this.mContext = context;
     }
 
-    public void record(String filePath) throws IOException {
+    @SuppressLint("CheckResult")
+    public RecoderHelper record(String filePath) throws IOException {
         if (mMediaRecorder == null) {
             mMediaRecorder = new MediaRecorder();
         } else {
             mMediaRecorder.reset();
         }
-        Toast.makeText(mContext.getApplicationContext(), "开始录音", Toast.LENGTH_SHORT).show();
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mMediaRecorder.setAudioSamplingRate(44100);
@@ -31,7 +36,14 @@ public class RecoderHelper {
         mMediaRecorder.setOutputFile(filePath);
         mMediaRecorder.prepare();
         mMediaRecorder.start();
-
+        io.reactivex.Observable.timer(10, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                release();
+                recordCompletedListener.completed();
+            }
+        });
+        return this;
     }
 
     public void play(String filePath) {
@@ -50,8 +62,14 @@ public class RecoderHelper {
     }
 
     public void release() {
+        mMediaRecorder.stop();
         mMediaRecorder.release();
-        mediaPlayer.release();
     }
+
+
+    public interface RecordCompletedListener {
+        void completed();
+    }
+
 
 }
