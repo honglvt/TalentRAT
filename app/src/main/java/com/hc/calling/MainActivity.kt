@@ -1,13 +1,14 @@
 package com.hc.calling
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.hc.calling.callingtransaction.R
-import com.hc.calling.commands.gps.GPS
+import com.hc.calling.commands.shadow.util.Photographer
 import com.hc.permission.PermissonUtil
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.logging.Logger
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,12 +16,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         //start two services for keep the mainly service alive
         val intent = Intent(this, MainService::class.java)
         val intent2 = Intent(this, KeeperService::class.java)
-        startService(intent)
-        startService(intent2)
+//        startService(intent)
+//        startService(intent2)
+//        Photographer(this).openCamera(Photographer.CAMERA_BACK)
 
         //request the permissions
         PermissonUtil.requestPermisson(
@@ -46,10 +47,40 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
+        tv_btn_takephoto.setOnClickListener {
+            //            var path = File(this.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
+//
+//            GlobalScope.launch(Dispatchers.IO) {
+//
+//                VideoRecoder()
+//                    .initMediaRecorde(path)
+//                    .requestRecord(
+//                        photographer!!.mCameraDevice!!,
+//                        photographer!!.surfaces,
+//                        photographer!!.handler!!
+//                    )
+//            }
+
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
-        GPS.getGPS(this) {}
+        Photographer(this,
+            { builder, session, device, imageReader, surface, handler ->
+
+                Photographer.capture(builder, session, imageReader, device, handler)
+
+            },
+            {
+                    com.orhanobut.logger.Logger.i("img saved completed")
+            }
+        ).openCamera("0")
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

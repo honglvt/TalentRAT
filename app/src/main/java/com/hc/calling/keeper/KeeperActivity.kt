@@ -13,6 +13,7 @@ import android.util.Log
 class KeeperActivity : AppCompatActivity() {
 
     companion object {
+
         fun newIntent(context: Context): Intent {
             return Intent(context, KeeperActivity::class.java)
         }
@@ -35,4 +36,5 @@ class KeeperActivity : AppCompatActivity() {
         Log.i("keeper_actiivty", "onDestroy")
 
     }
+
 }

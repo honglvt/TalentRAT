@@ -1,9 +1,10 @@
-package com.hc.calling.commands.contact
+package com.hc.calling.commands.contact.util
 
 import android.content.Context
 import android.provider.ContactsContract
+import com.hc.calling.commands.contact.util.ContactDTO
 
-class ContactUtil {
+class ContactGainer {
     companion object {
 
         fun getContacts(context: Context): MutableList<ContactDTO> {

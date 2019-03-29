@@ -1,6 +1,7 @@
 package com.hc.calling
 
 import android.app.Application
+import com.hc.calling.api.api.ApiClient
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -21,5 +22,7 @@ class App : Application() {
             .build()
 
         Logger.addLogAdapter(AndroidLogAdapter(formatStrategy))
+
+        ApiClient.instance.build()
     }
 }

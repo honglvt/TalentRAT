@@ -9,5 +9,5 @@ interface Executor {
     /**
      * execute the command from server
      */
-    fun execute(data: Any)
+    fun execute(data: Array<Any>)
 }

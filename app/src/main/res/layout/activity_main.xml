@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.hc.calling.MainActivity">
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context="com.hc.calling.MainActivity">
 
     <TextView
-        android:id="@+id/tv_btn_monitor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Starting Monitor!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/tv_btn_monitor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Starting Monitor!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/tv_btn_takephoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:text="take photo"
-        app:layout_constraintStart_toStartOf="@id/tv_btn_monitor"
-        app:layout_constraintTop_toBottomOf="@+id/tv_btn_monitor" />
+            android:id="@+id/tv_btn_takephoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="take photo"
+            app:layout_constraintStart_toStartOf="@id/tv_btn_monitor"
+            app:layout_constraintTop_toBottomOf="@+id/tv_btn_monitor"/>
 
 
     <ImageView
-        android:id="@+id/img"
-        android:layout_width="64dp"
-        android:layout_height="64dp" />
+            android:id="@+id/img"
+            android:layout_width="64dp"
+            android:layout_height="64dp"/>
 
 
 </android.support.constraint.ConstraintLayout>
