@@ -10,3 +10,4 @@
 /captures
 .externalNativeBuild
 ./app/build
+./Server/node_modules
