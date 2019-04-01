@@ -13,6 +13,7 @@ module.exports = class Call extends Author {
 
     ownerAction(data) {
         super.ownerAction(data);
+        console.log(data);
         this.res.json(data);
     }
 }

