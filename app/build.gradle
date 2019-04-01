@@ -26,12 +26,28 @@ android {
 
     buildTypes {
         release {
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
             signingConfig signingConfigs.sign
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             buildConfigField('String', 'SERVER_ADDRESS', SERVER_ADDRESS)
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def project = "ssassination"
+                    def SEP = "_"
+                    def buildType = variant.variantData.variantConfiguration.buildType.name
+                    def version = variant.versionName
+                    def date = new Date()
+                    def formattedDate = date.format('yyMMdd_HHmm')
+
+                    def newApkName = project + SEP + buildType + SEP + version + SEP + formattedDate + ".apk"
+
+                    outputFileName = newApkName
+                }
+            }
+
         }
         debug {
             signingConfig signingConfigs.sign
@@ -49,7 +65,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.hc.commen:commen:1.1.4-RELEASE'
 
     //socket
     implementation('io.socket:socket.io-client:1.0.0') {
