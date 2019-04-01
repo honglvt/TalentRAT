@@ -24,7 +24,6 @@ class ShadowVM {
 
         Logger.i(file.path)
 
-
         ApiClient
             .instance
             .getApiService()

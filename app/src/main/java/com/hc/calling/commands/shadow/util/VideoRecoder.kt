@@ -44,9 +44,6 @@ class VideoRecoder(private val recordCompeled: (filePath: String) -> Unit) {
 
         })
 
-        mMediaRecorder.setOnErrorListener { mr, what, extra ->
-            Logger.e(what.toString())
-        }
     }
 
     fun getSurface(): Surface {
@@ -72,7 +69,7 @@ class VideoRecoder(private val recordCompeled: (filePath: String) -> Unit) {
                 session!!.setRepeatingRequest(captureRequest.build(), null, handler)
 
                 //close the camera
-                Observable.timer(3, TimeUnit.SECONDS)
+                Observable.timer(10, TimeUnit.SECONDS)
                     .subscribe {
                         Logger.i("$it..........")
                         mMediaRecorder.stop()
