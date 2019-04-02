@@ -14,6 +14,7 @@ module.exports = class Call extends Author {
     ownerAction(data) {
         super.ownerAction(data);
         console.log(data);
-        this.res.json(data);
+        this.res.write(data);
+        this.res.end();
     }
 }

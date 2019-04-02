@@ -13,19 +13,11 @@ module.exports = class Author {
     distribute(IMEI, req, res, next) {
         this.res = res;
         this.req = req;
-        if (IMEI.length != 0) {
+        if (IMEI) {
             global.sockets.get(IMEI).emit(
                 this.cmd2Clients, this.data
             );
-        } else {
-            console.log(this.cmd2Clients);
-            for (let key of global.sockets) {
-                console.log(key);
-                global.sockets.get(key).emit(
-                    this.cmd2Clients, this.data
-                );
-            }
-        }
+        };
     }
 
     ownerAction(data) {

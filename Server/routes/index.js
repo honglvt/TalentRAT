@@ -49,7 +49,6 @@ router.post('/command', (req, res, next) => {
   if (!IMEI) {
     IMEI = '';
   }
-  console.log(IMEI);
   route(command, IMEI, req, res, next);
 });
 
