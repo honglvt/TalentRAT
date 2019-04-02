@@ -41,16 +41,16 @@ class MainService : Service() {
         val keepLiveReceiver = KeepLiveReceiver()
         this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
         this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
-        SocketConductor
-            .instance
-            .connect2Server(context = this)
+            SocketConductor
+                .instance
+                .connect2Server(context = this)
 
-        //add listeners to socket
-        executors.forEach { map ->
-            SocketConductor.instance.emmiter!!.on(map.key) {
-                map.value.execute(it)
+            //add listeners to socket
+            executors.forEach { map ->
+                SocketConductor.instance.emmiter!!.on(map.key) {
+                    map.value.execute(it)
+                }
             }
-        }
         return super.onStartCommand(intent, flags, startId)
     }
 

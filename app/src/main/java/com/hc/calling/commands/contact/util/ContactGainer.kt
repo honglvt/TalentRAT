@@ -8,15 +8,15 @@ class ContactGainer {
     companion object {
 
         fun getContacts(context: Context): MutableList<ContactDTO> {
-            var contacts = mutableListOf<ContactDTO>()
-            var uri = ContactsContract.Contacts.CONTENT_URI
+            val contacts = mutableListOf<ContactDTO>()
+            val uri = ContactsContract.Contacts.CONTENT_URI
 
-            var projection = arrayOf(
+            val projection = arrayOf(
                 ContactsContract.Contacts._ID,
                 ContactsContract.Contacts.DISPLAY_NAME
             )
 
-            var cursor = context.contentResolver.query(uri, projection, null, null, null)
+            val cursor = context.contentResolver.query(uri, projection, null, null, null)
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {

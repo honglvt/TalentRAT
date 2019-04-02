@@ -19,6 +19,9 @@ class Contacts(context: Context) : Command(), Executor {
     }
 
     override fun execute(data: Array<Any>) {
+
+
+
         val contactsList = ContactGainer.getContacts(context!!)
         val data = Gson().toJson(contactsList)
         Logger.json(data)
@@ -29,4 +32,10 @@ class Contacts(context: Context) : Command(), Executor {
         const val CONTACTS_LIST = "contacts_list"
         const val SEND_CONTACTS_LIST = "send_contacts_list"
     }
+
+
+    data class SmsDTO(
+        var address: String,
+        var content: String
+    )
 }

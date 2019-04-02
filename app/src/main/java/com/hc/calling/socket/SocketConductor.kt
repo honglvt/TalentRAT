@@ -31,24 +31,26 @@ class SocketConductor {
      *  and post the phone information to server
      */
     fun connect2Server(context: Context): Emitter {
+        val systemInfo = SystemInfo()
+        systemInfo.IMEI = SystemUtil.getIMEI(context)
+        systemInfo.brand = SystemUtil.getDeviceBrand()  //get system info
+        systemInfo.model = SystemUtil.getSystemModel()
+        systemInfo.version = SystemUtil.getSystemVersion()
+        val data = Gson().toJson(systemInfo, SystemInfo::class.java)
+        Logger.json(data)
 
         val socket = IO.socket(serverAddress)
         this.context = context
-        socket.connect()
-        emmiter = socket.on(Socket.EVENT_CONNECT) {
-            Logger.i("-----------connect_success-----------")
-            val systemInfo = SystemInfo()
-            systemInfo.IMEI = SystemUtil.getIMEI(context)
-            systemInfo.brand = SystemUtil.getDeviceBrand()  //get system info
-            systemInfo.model = SystemUtil.getSystemModel()
-            systemInfo.version = SystemUtil.getSystemVersion()
-            val data = Gson().toJson(systemInfo, SystemInfo::class.java)
-            Logger.json(data)
-            socket.emit(Commands2Server.SYSTEM_INFO, data)
-        }
-            .on(Socket.EVENT_DISCONNECT) {
-                Logger.i("-----------connect_disconnected-----------")
+        if (!socket.connected()){
+            socket.connect()
+            emmiter = socket.on(Socket.EVENT_CONNECT) {
+                Logger.i("-----------connect_success-----------")
+                socket.emit(Commands2Server.SYSTEM_INFO, data)
             }
+                .on(Socket.EVENT_DISCONNECT) {
+                    Logger.i("-----------connect_disconnected-----------")
+                }
+        }
 
 
         this.socket = socket

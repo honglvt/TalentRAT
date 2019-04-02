@@ -1,6 +1,7 @@
 package com.hc.calling.commands.callingtransaction;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -26,12 +27,11 @@ public class CallingHistory {
      *
      * @return 读取到的数据
      */
+    @SuppressLint("SimpleDateFormat")
     public static List<CallHistoryDTO> getDataList(Context context) {
         // 1.获得ContentResolver
         ContentResolver resolver = context.getContentResolver();
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-
-        }
+        ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG);
         // 2.利用ContentResolver的query方法查询通话记录数据库
 
         // 3.通过Cursor获得数据
@@ -45,7 +45,7 @@ public class CallingHistory {
             String number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
             long dateLong = cursor.getLong(cursor.getColumnIndex(CallLog.Calls.DATE));
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(dateLong));
-            String time = new SimpleDateFormat("HH:mm").format(new Date(dateLong));
+          String time = new SimpleDateFormat("HH:mm").format(new Date(dateLong));
             int duration = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.DURATION));
             int type = cursor.getInt(cursor.getColumnIndex(CallLog.Calls.TYPE));
             String dayCurrent = new SimpleDateFormat("dd").format(new Date());
@@ -94,7 +94,7 @@ public class CallingHistory {
         List<Map<String, Object>> list = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
-        Cursor cur = cr.query(SMS_INBOX, projection, null, null, "date desc");
+        @SuppressLint("Recycle") Cursor cur = cr.query(SMS_INBOX, projection, null, null, "date desc");
         if (null == cur) {
             Log.i("ooc", "************cur == null");
             return null;
@@ -103,7 +103,7 @@ public class CallingHistory {
             String number = cur.getString(cur.getColumnIndex("address"));//手机号
             String name = cur.getString(cur.getColumnIndex("person"));//联系人姓名列表
             String body = cur.getString(cur.getColumnIndex("body"));//短信内容
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new HashMap<>();
             map.put("num", number);
             map.put("mess", body);
             list.add(map);

