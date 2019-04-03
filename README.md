@@ -3,7 +3,7 @@
 - betaV1.0
 - adapter android Lollipop-Pie
 - commit issues to me 
-## 1.Features
+## Features
 - get Sms_List
 - send Sms to destinationAddress
 - get Calling_History
@@ -23,17 +23,18 @@ of course the duration decided by yourself
 3. AndroidSdk 
 4. node.js
 5. npm
-
 ## 2.Usage
-#### Frisr of all [Start up The Server]
+#### Start up The Server
+```
 1. git clone git@github.com:honglvt/TalentRAT.git / or https
 2. cd the project path
 3. cd Server
 4. npm install
 5. npm start
+```
 now you can see the terminal show ASSASSIN
 
-#### Secondary [Build the Android app then install to ur device]
+#### Build the Android apk 
 1. confrim that you have prepare the env for building the app
 2. connect the android device  to ur PC
 3. enable the develop mode on ur android device
@@ -42,15 +43,17 @@ if you are not a developer you can install the apk yourself
 - post the .apk to your device such as email or other way
 - then install the .apk on folder
 ----
-#### Finally
+#### Intasll apk to ur device
+```
 1. cd the project path 
 2. ./assembleApk.sh debug    you can choose the arg debug/release
 3. ./installNewestApk.sh 
 4. open the apk on ur device
 5. the most important is that  you should grant all of the permissions on the device
-
-## 3.Instruction to client
+```
+## Instruction to client
+```
 1. cd /Server
 2. chmod 777 ./assassin.js
 3. ./assassin.js -C
-
+```
