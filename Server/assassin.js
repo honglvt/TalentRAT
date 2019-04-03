@@ -1,3 +1,5 @@
+#! /usr/local/bin/node
+
 let program = require('commander');
 let request = require('request');
 let HOST = 'http://localhost:3000/';
