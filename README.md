@@ -3,9 +3,9 @@
 - beta 1.0.0
 - adapter android Lollipop-Pie
 - commit issues to me 
-## 1. Construction
+# Construction
 ![assembleApk](https://cdn-std.dprcdn.net/files/acc_737120/1P2KVt)
-## Features
+# Features
 - get Sms_List
 - send Sms to destinationAddress
 - get Calling_History
@@ -19,13 +19,13 @@
 - record video then send to server
 </br>of course the duration decided by yourself
 
-## 2. Basement/Environment
+# Basement/Environment
 - Gradle 
 - JDK1.8
 - AndroidSdk 
 - node.js
 - npm
-## 3. Usage
+# Usage
 #### 1.Start up The Server
 ```
 1. git clone git@github.com:honglvt/TalentRAT.git / or https
@@ -60,7 +60,7 @@ edit the SERVER_ADDRESS that you got befroe
 4. open the apk on ur device
 5. the most important is that  you should grant all of the permissions on the device
 ```
-## 4. Instruction to client
+# Instruction to client
 ```
 1. cd /Server
 2. which node
@@ -105,7 +105,7 @@ Options:
 |  result   | { command: 'send_sms_list', IMEI: '184859203' }  | 
 ----
 
-## 5. Prompt
+# Prompt
 
 - keep node server alive when you send a command
 - cmd with ./assassin.js will return a Json data  you can do whatever with the response 
@@ -114,7 +114,6 @@ Options:
   - then you can find the pic has saved on the */project/Server/public/images/xxxx.jpeg'
   - the same with other shadow
 - the duration in recording video or audio decided by yourself
-## 6. Commands
 
 # Screen Shot
 ### server
