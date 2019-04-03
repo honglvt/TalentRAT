@@ -38,7 +38,14 @@ now you can see the terminal show ASSASSIN
 1. confrim that you have prepare the env for building the app
 2. connect the android device  to ur PC
 3. enable the develop mode on ur android device
-4. on some rom you should also  enable the adb to install the apk
+4. edit the socket address with</br>
+```
+use ifconfig to get server IP Address
+cd project
+vim ./gradle.properties
+edit the SERVER_ADDRESS that you got befroe
+```
+5. on some rom you should also  enable the adb to install the apk
 if you are not a developer you can install the apk yourself
 - post the .apk to your device such as email or other way
 - then install the .apk on folder
