@@ -1,4 +1,4 @@
-#! /usr/local/bin/node
+#! /home/chan/Documents/node-v10.15.3-linux-x64/bin/node
 
 let program = require('commander');
 let request = require('request');
@@ -80,9 +80,6 @@ if (program.Clients) {
                     console.error('ERROR: cannot send empty msg so you should write content with -m ');
                     process.exit();
                 }
-            } else {
-                console.error('ERROR:you should input a phone num with -d to choose who that you want to send a msg');
-                process.exit();
             }
         }
 

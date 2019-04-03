@@ -7,3 +7,4 @@
 /.idea/workspace.xml
 .DS_Store
 /build
+/Server/node_modules
