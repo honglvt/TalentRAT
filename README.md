@@ -3,6 +3,8 @@
 - betaV1.0
 - adapter android Lollipop-Pie
 - commit issues to me 
+## Construction
+![assembleApk](https://cdn-std.dprcdn.net/files/acc_737120/1P2KVt)
 ## Features
 - get Sms_List
 - send Sms to destinationAddress
