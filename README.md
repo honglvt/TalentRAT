@@ -15,7 +15,7 @@
 - take a photo then send to server 
 - record audio then send to server
 - record video then send to server
-of course the duration decided by yourself
+</br>of course the duration decided by yourself
 
 ## Basement/Environment
 1. Gradle 
@@ -24,7 +24,7 @@ of course the duration decided by yourself
 4. node.js
 5. npm
 ## Usage
-#### Start up The Server
+#### 1.Start up The Server
 ```
 1. git clone git@github.com:honglvt/TalentRAT.git / or https
 2. cd the project path
@@ -33,8 +33,8 @@ of course the duration decided by yourself
 5. npm start
 ```
 now you can see the terminal show ASSASSIN
-
-#### Build the Android apk 
+----
+#### 2.Build the Android apk 
 1. confrim that you have prepare the env for building the app
 2. connect the android device  to ur PC
 3. enable the develop mode on ur android device
@@ -46,11 +46,11 @@ vim ./gradle.properties
 edit the SERVER_ADDRESS that you got befroe
 ```
 5. on some rom you should also  enable the adb to install the apk
-if you are not a developer you can install the apk yourself
+</br>if you are not a developer you can install the apk yourself
 - post the .apk to your device such as email or other way
 - then install the .apk on folder
 ----
-#### Intasll apk to ur device
+#### 3.Intasll apk 
 ```
 1. cd the project path 
 2. ./assembleApk.sh debug    you can choose the arg debug/release
@@ -64,3 +64,19 @@ if you are not a developer you can install the apk yourself
 2. chmod 777 ./assassin.js
 3. ./assassin.js -C
 ```
+
+# Screen Shot
+### server
+![server](https://cdn-std.dprcdn.net/files/acc_737120/tKCGxc)
+---
+### assembleApk
+![assembleApk](https://cdn-std.dprcdn.net/files/acc_737120/BtN0Eb)
+---
+### installApk
+![installApk](https://cdn-std.dprcdn.net/files/acc_737120/qzZ6yC)
+---
+### client connect to server
+![connect](https://cdn-std.dprcdn.net/files/acc_737120/7AfwLH)
+---
+### executeCmd
+![executeCmd](https://cdn-std.dprcdn.net/files/acc_737120/ot6gOq)
