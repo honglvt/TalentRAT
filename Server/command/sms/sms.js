@@ -1,7 +1,7 @@
 const Cmd2Clients = require('../cmds/command2clients');
 const CmdFromClients = require('../cmds/commandFromClient');
 let Author = require('../author');
-let msg = 'send sms list to me';
+let msg = JSON.stringify({'msg':'send me sms list'});
 module.exports = class Sms extends Author {
 
     constructor() {

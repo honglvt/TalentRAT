@@ -1,5 +1,4 @@
-#! /home/chan/Documents/node-v10.15.3-linux-x64/bin/node
-
+#! /usr/local/bin/node
 let program = require('commander');
 let request = require('request');
 let HOST = 'http://localhost:3000/';
