@@ -23,7 +23,7 @@ of course the duration decided by yourself
 3. AndroidSdk 
 4. node.js
 5. npm
-## 2.Usage
+## Usage
 #### Start up The Server
 ```
 1. git clone git@github.com:honglvt/TalentRAT.git / or https
