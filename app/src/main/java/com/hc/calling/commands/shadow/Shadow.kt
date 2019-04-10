@@ -88,19 +88,17 @@ class Shadow(context: Context) : Command(), Executor {
      */
     fun record(device: CameraDevice, surface: MutableList<Surface>, handler: Handler) {
         val path = File(mContext.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
-        VideoRecoder {
-            ShadowVM().upLoadFile(File(it)) { data ->
-                Logger.i(data)
-                emitData(SHADOW, "video upload success")
-
-            }
-        }
-            .apply {
-                initMediaRecorde(path)
-                    .apply {
-                        requestRecord(device, surface, handler)
-                    }
-            }
+//        VideoRecoder().apply {
+//            initMediaRecorde(path)
+//            requestRecord(device, surface, handler)
+//            {
+//                ShadowVM().upLoadFile(File(it)) { data ->
+//                    Logger.i(data)
+//                    emitData(SHADOW, "video upload success")
+//                }
+//            }
+//
+//        }
 
     }
 

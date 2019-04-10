@@ -26,10 +26,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_btn_monitor"/>
 
 
-    <ImageView
-            android:id="@+id/img"
-            android:layout_width="64dp"
-            android:layout_height="64dp"/>
 
 
 </android.support.constraint.ConstraintLayout>

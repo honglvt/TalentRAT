@@ -72,6 +72,7 @@ if (program.Clients) {
             }
         } else if (program.assassin == 'sms') {
             if (program.address) {
+                console.log(program.address);
                 requestBody['address'] = program.address;
                 if (program.msg) {
                     requestBody['content'] = program.msg;

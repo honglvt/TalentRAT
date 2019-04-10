@@ -17,6 +17,7 @@ module.exports = class Author {
             global.sockets.get(IMEI).emit(
                 this.cmd2Clients, this.data
             );
+            this.data = '';
         };
     }
 

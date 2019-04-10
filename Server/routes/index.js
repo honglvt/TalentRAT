@@ -6,12 +6,15 @@ const cmdFromClients = require('../command/cmds/commandFromClient');
 let formidable = require('formidable');
 let fs = require('fs');
 let multer = require('multer');
-
+let baseFolder = './public/images'
 let filePath = ''
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/images');
+    if (!fs.existsSync(baseFolder)) {
+      fs.mkdirSync(baseFolder);
+    };
+    cb(null, baseFolder);
   },//指定硬盘空间的路径，这里可以是任意一个绝对路径，这里为了方便所以写了个相对路径
   filename: function (req, file, cb) {
     console.log(file.originalname);
