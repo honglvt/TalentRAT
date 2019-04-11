@@ -9,6 +9,7 @@ public class DateUtil {
         Date dt = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         temp_str = sdf.format(dt);
+
         return temp_str;
     }
 

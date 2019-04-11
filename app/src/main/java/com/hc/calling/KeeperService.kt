@@ -20,7 +20,6 @@ import com.hc.calling.callingtransaction.R
  *
  */
 class KeeperService : Service() {
-    val FOREGROUND_ID = 111
     override fun onBind(intent: Intent?): IBinder {
         return Binder()
     }

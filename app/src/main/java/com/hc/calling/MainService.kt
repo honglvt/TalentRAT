@@ -19,7 +19,7 @@ import com.hc.calling.socket.SocketConductor
  *
  */
 class MainService : Service() {
-    val executors = mutableMapOf<String, Executor>()
+    private val executors = mutableMapOf<String, Executor>()
 
     override fun onCreate() {
         super.onCreate()
@@ -33,7 +33,7 @@ class MainService : Service() {
             .connect2Server(context = this)
             .apply {
                 executors.forEach { map ->
-                    SocketConductor.instance.emmiter!!.on(map.key) {
+                    this.on(map.key) {
                         map.value.execute(it)
                     }
                 }
@@ -49,9 +49,10 @@ class MainService : Service() {
      *    connect to the socket server
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val keepLiveReceiver = KeepLiveReceiver()
-        this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
-        this.registerReceiver(keepLiveReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+        KeepLiveReceiver().apply {
+            this@MainService.registerReceiver(this, IntentFilter(Intent.ACTION_SCREEN_ON))
+            this@MainService.registerReceiver(this, IntentFilter(Intent.ACTION_SCREEN_OFF))
+        }
         if (!SocketConductor.instance.socket!!.connected()) {
             SocketConductor.instance.socket!!.connect()
         }
