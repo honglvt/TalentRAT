@@ -2,26 +2,15 @@ package com.hc.calling
 
 import android.Manifest
 import android.content.Intent
-import android.media.MediaRecorder
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.hc.calling.callingtransaction.R
 import com.hc.calling.commands.shadow.util.Photographer
-import com.hc.calling.commands.shadow.vision.camera.Camera2Control
-import com.hc.calling.util.DateUtil
 import com.hc.calling.util.DensityUtil
 import com.hc.calling.util.PermissonUtil
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
-
-    val mRecorder = MediaRecorder()
-
-    companion object {
-        val SPF_NAME = "density"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,23 +42,7 @@ class MainActivity : AppCompatActivity() {
                 10000
             )
         ) {
-//            finish()
-        }
-
-        tv_btn_takephoto.setOnClickListener {
-            //            Camera1Control(
-//                File(this.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss")).path,
-//                this,
-//                0.toString()
-//            ).takePhoto {
-//
-//            }
-
-            Camera2Control(
-                File(this.getExternalFilesDir(null), DateUtil.GetNowDate("yyyy-MM-ddHHmmss")).path,
-                this,
-                0.toString()
-            ).takePhoto {  }
+            finish()
         }
 
 

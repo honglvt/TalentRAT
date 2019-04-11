@@ -16,23 +16,20 @@ import com.hc.calling.commands.shadow.vision.Recorder
  *
  */
 class Camera2Control(
-    filePath: String,
-    context: Context,
-    camera: String
+    context: Context
 ) :
-    Recorder(filePath, context, camera) {
-    var mCameraDevice: CameraDevice? = null
-    var mSurfaces: MutableList<Surface>? = null
-    var mHandler: Handler? = null
-    var mCaptureRequestBuilder: CaptureRequest.Builder? = null
-    var mImageReader: ImageReader? = null
-    var mCaptureSession: CameraCaptureSession? = null
-
-    var photographer: Photographer? = null
+    Recorder(context) {
+    private var mCameraDevice: CameraDevice? = null
+    private var mSurfaces: MutableList<Surface>? = null
+    private var mHandler: Handler? = null
+    private var mCaptureRequestBuilder: CaptureRequest.Builder? = null
+    private var mImageReader: ImageReader? = null
+    private var mCaptureSession: CameraCaptureSession? = null
+    private var photographer: Photographer? = null
 
     override fun record(completed: (filePath: String) -> Unit) {
         super.record()
-        VideoRecoder(mFilePath).requestRecord(mCameraDevice!!, mSurfaces!!, mHandler!!) {
+        VideoRecoder(mFilePath!!).requestRecord(mCameraDevice!!, mSurfaces!!, mHandler!!) {
             completed(it)
         }
     }
@@ -51,7 +48,7 @@ class Camera2Control(
         }
     }
 
-    override fun initMediaRecorder() {
+    override fun initMediaRecorder(completed: () -> Unit) {
         photographer = Photographer(mContext) { builder, session, device, imageReader, surfaces, handler ->
             mCameraDevice = device
             mSurfaces = surfaces
@@ -59,7 +56,8 @@ class Camera2Control(
             mCaptureRequestBuilder = builder
             mImageReader = imageReader
             mCaptureSession = session
-
-        }.openCamera(mCamera)
+            completed()
+        }.openCamera(mCamera!!)
     }
+
 }

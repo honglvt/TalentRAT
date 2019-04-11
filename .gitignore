@@ -8,3 +8,5 @@
 .DS_Store
 /build
 /Server/node_modules
+./Server/public/images/
+

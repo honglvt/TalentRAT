@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit
  * Created by ChanHong on 2019/4/10
  *
  */
-class Camera1Control(filePath: String, contect: Context, camera: String) : Recorder(filePath, contect, camera) {
+class Camera1Control(context: Context) : Recorder(context) {
     override fun takePhoto(completed: (filePath: String) -> Unit) {
         super.takePhoto(completed)
-        Camera.open(mCamera.toInt()).apply {
+        Camera.open(mCamera!!.toInt()).apply {
             setPreviewTexture(SurfaceTexture(0))
             startPreview()
             takePicture(null, null) { data, camera ->
@@ -29,17 +29,17 @@ class Camera1Control(filePath: String, contect: Context, camera: String) : Recor
                     flush()
                     camera.stopPreview()
                     camera.release()
-                    completed(mFilePath)
+                    completed(mFilePath!!)
                 }
             }
         }
 
     }
 
-    override fun initMediaRecorder() {
+    override fun initMediaRecorder(completed: () -> Unit) {
         mMediaRecorder.apply {
             setAudioSource(MediaRecorder.AudioSource.CAMCORDER)//摄录像机
-            setVideoSource(MediaRecorder.VideoSource.CAMERA)//相机
+            setVideoSource(mCamera!!.toInt())//相机
 
             // Set output file format
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)//输出格式 mp4
@@ -58,7 +58,7 @@ class Camera1Control(filePath: String, contect: Context, camera: String) : Recor
 
             setOutputFile(mFilePath)
             prepare()
-
+            completed()
         }
 
     }
@@ -74,7 +74,7 @@ class Camera1Control(filePath: String, contect: Context, camera: String) : Recor
         Observable.timer(10, TimeUnit.SECONDS).subscribe {
             mMediaRecorder.stop()
             mMediaRecorder.release()
-            completed(mFilePath)
+            completed(mFilePath!!)
         }
 
     }
