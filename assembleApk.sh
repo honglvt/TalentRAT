@@ -2,8 +2,9 @@
 
 ENV=$1
 MACHINE=$2
-
+IP=$3
 echo $MACHINE
+echo "the server ip is $IP"
 GRADLE_FILE="./app/build.gradle"
 
 if [ -z "$MACHINE" ]; then
@@ -14,12 +15,18 @@ if [ -z "$ENV" ]; then
   ENV="debug"
 fi
 
+if [ -z "IP" ]; then
+  IP="localHost"
+fi
+
 if [ $ENV != 'release' ]; then
     echo 'append dev string to versionName'
     if [ $MACHINE != 'mac' ]; then
     sed -i 's@versionName.*versionPatch)$@&\+"dev"@' $GRADLE_FILE
+    sed -i "s/serverAddress/$IP/g" gradle.properties
     else
         sed -i '' 's@versionName.*versionPatch)$@&\+"dev"@' $GRADLE_FILE
+        sed -i '' "s/serverAddress/$IP/g" gradle.properties
     fi
 else
     echo 'remove dev string from versionName'

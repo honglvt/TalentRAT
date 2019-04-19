@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -19,7 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven{ url 'http://localhost:8081/repository/commen/'}
+//        maven{ url 'http://localhost:8081/repository/commen/'}
 
     }
 }
