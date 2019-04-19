@@ -46,8 +46,6 @@ now you can see the terminal show ASSASSIN
 ```
 use ifconfig to get server IP Address
 cd project
-vim ./gradle.properties
-edit the SERVER_ADDRESS that you got befroe
 ```
 5. on some rom you should also  enable the adb to install the apk
 6. if you are not a developer you can install the apk yourself
@@ -57,7 +55,7 @@ edit the SERVER_ADDRESS that you got befroe
 #### 3.Intasll apk 
 ```
 1. cd the project path 
-2. ./assembleApk.sh debug    you can choose the arg debug/release
+2. ./assembleApk.sh debug mac ipAddress  // you can choose the arg debug/release
 3. ./installNewestApk.sh 
 4. open the apk on ur device
 5. the most important is that  you should grant all of the permissions on the device
