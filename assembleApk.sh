@@ -15,28 +15,31 @@ if [ -z "$ENV" ]; then
   ENV="debug"
 fi
 
-if [ -z "IP" ]; then
-  IP="localHost"
-fi
-
 if [ $ENV != 'release' ]; then
     echo 'append dev string to versionName'
     if [ $MACHINE != 'mac' ]; then
-    sed -i 's@versionName.*versionPatch)$@&\+"dev"@' $GRADLE_FILE
-    sed -i "s/serverAddress/$IP/g" gradle.properties
+        sed -i 's@versionName.*versionPatch)$@&\+"dev"@' $GRADLE_FILE
     else
         sed -i '' 's@versionName.*versionPatch)$@&\+"dev"@' $GRADLE_FILE
-        sed -i '' "s/serverAddress/$IP/g" gradle.properties
     fi
 else
     echo 'remove dev string from versionName'
     if [ $MACHINE != 'mac' ]; then
-    sed -i 's@\+"dev"@@' $GRADLE_FILE
+        sed -i 's@\+"dev"@@' $GRADLE_FILE
     else
         sed -i '' 's@\+"dev"@@' $GRADLE_FILE 
     fi
 fi
 
+if [ ! -n "$IP" ]; then
+    echo "IPAdress is null"
+else
+    if [ $MACHINE != 'mac' ]; then
+        sed -i "s/serverAddress/$IP/g" gradle.properties
+    else
+        sed -i '' "s/serverAddress/$IP/g" gradle.properties
+    fi
+fi
 
 get_uppercase_env() {
   current_env=$1
@@ -52,4 +55,3 @@ echo "############### begin $build_action ###################"
 ./gradlew $build_action
 
 echo "############## finish $build_action ####################"
-
