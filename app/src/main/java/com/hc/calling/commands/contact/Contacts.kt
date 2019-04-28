@@ -34,9 +34,4 @@ class Contacts(context: Context) : Command(), Executor {
         const val SEND_CONTACTS_LIST = "send_contacts_list"
     }
 
-
-    data class SmsDTO(
-        var address: String,
-        var content: String
-    )
 }

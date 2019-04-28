@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.hc.calling.callingtransaction">
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera2.full" />
-    <uses-feature android:name="android.hardware.camera2.autofocus" />
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.hc.calling.callingtransaction">
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera2.full"/>
+    <uses-feature android:name="android.hardware.camera2.autofocus"/>
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
@@ -24,6 +27,9 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application
             android:name="com.hc.calling.App"
             android:allowBackup="true"
@@ -31,7 +37,8 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
+            android:theme="@style/AppTheme"
+            tools:ignore="GoogleAppIndexingWarning">
         <activity android:name="com.hc.calling.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -39,18 +46,35 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.hc.calling.keeper.KeeperActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
-                  android:excludeFromRecents="true"
-                  android:exported="false"
-                  android:finishOnTaskLaunch="false"
-                  android:launchMode="singleInstance"
-                  android:process=":live"
-        />
+        <activity
+                android:name="com.hc.calling.keeper.KeeperActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize|navigation|keyboard"
+                android:excludeFromRecents="true"
+                android:exported="false"
+                android:finishOnTaskLaunch="false"
+                android:launchMode="singleInstance"
+                android:process=":live"
+                />
+
         <service android:name="com.hc.calling.MainService"
-        />
+                />
+        <service
+                android:name="com.hc.calling.commands.dingding.DakaAccessibilityService"
+                android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+                android:label="@string/accessibility_service_label"
+                >
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.accessibilityservice"
+                    android:resource="@xml/accessibility_service_config" />
+        </service>
+
         <service android:name="com.hc.calling.KeeperService"/>
+
         <receiver android:name="com.hc.calling.keeper.KeepLiveReceiver"/>
+        <receiver android:name="com.hc.calling.commands.dingding.DingTalk$AlarmReciver"/>
     </application>
 
 </manifest>

