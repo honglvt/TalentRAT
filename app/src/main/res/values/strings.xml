@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Assassin</string>
     <string name="accessibility_service_label">access_service</string>
+    <string name="xiaoenai_accessibility_service_label">xiaoenai_access_service</string>
     <string name="accessibility_service_description">accessibility_service_description</string>
+    <string name="xiaoenai_accessibility_service_description">xiaoenai_accessibility_service_description</string>
 </resources>
