@@ -16,11 +16,13 @@
 - androidSdk-tools/uiautomatorviewer //用于查看布局控件id，androidsdk自带
 - vscode //编码，调试 
 # Usage
-1.安装 vscode for auto.js插件
-2.打开服务器
-3.安装Autjs.apk到手机，打开辅助功能，连接到服务器
-4.复制代码到IDE
-5.跑代码，手机自动运行
+1. 安装 vscode for auto.js插件
+2. 打开服务器
+3. 安装Autjs.apk到手机，打开辅助功能，连接到服务器
+4. 复制代码到IDE
+5. 跑代码，手机自动运行
 # 效果图
-![gif](https://cdn-std.dprcdn.net/files/acc_737120/s3oaJh)
+### 打卡gif
+![E8OGid.gif](https://s2.ax1x.com/2019/04/30/E8OGid.gif)
+### uiautomatorviewer
 ![uiautoviewer](https://cdn-std.dprcdn.net/files/acc_737120/MIf7xl)
