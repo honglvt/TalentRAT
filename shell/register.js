@@ -45,7 +45,7 @@ login = function () {
     btnWeiBo.click();
 }
 
-let token = "00516259844ea68fd05ece6dc7fa430743e48a9fee01";
+let token = "00516259";
 let itemId = 190;
 register = function () {
     if (count == 0) {
